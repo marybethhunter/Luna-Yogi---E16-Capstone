@@ -1,38 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { signInUser, signOutUser } from '../api/auth';
 
 function Initialize() {
-  const [domWriting, setDomWriting] = useState('Nothing Here!');
+  const [user, setUser] = useState(null);
 
-  const handleClick = (e) => {
-    console.warn(`You clicked ${e.target.id}`);
-    setDomWriting(`You clicked ${e.target.id}! Check the Console!`);
-  };
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((authed) => {
+      if (authed) {
+        const userObj = {
+          fullName: authed.displayName,
+          email: authed.email,
+          uid: authed.uid,
+          isAdmin: process.env.REACT_APP_ADMIN_UID === authed.uid,
+        };
+        setUser(userObj);
+      } else if (user || user === null) {
+        setUser(false);
+      }
+    });
+  }, []);
 
   return (
-    <div className="App">
-      <h2>INSIDE APP COMPONENT</h2>
-      <div>
-        <button
-          type="button"
-          id="this-button"
-          className="btn btn-info"
-          onClick={handleClick}
-        >
-          I am THIS button
-        </button>
-      </div>
-      <div>
-        <button
-          type="button"
-          id="that-button"
-          className="btn btn-primary mt-3"
-          onClick={handleClick}
-        >
-          I am THAT button
-        </button>
-      </div>
-      <h3>{domWriting}</h3>
-    </div>
+    // have logo/header and button group here and then the footer below
+    <>
+      <button type="button" onClick={signInUser}>
+        sign in
+      </button>
+      <button type="button" onClick={signOutUser}>
+        sign out
+      </button>
+    </>
   );
 }
 
