@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { signInUser, signOutUser } from '../api/auth';
+import Routes from '../routes';
+import NavButtonGroup from '../components/NavButtonGroup';
 
 function Initialize() {
   const [user, setUser] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((authed) => {
@@ -16,8 +20,6 @@ function Initialize() {
           isAdmin: process.env.REACT_APP_ADMIN_UID === authed.uid,
         };
         setUser(userObj);
-      } else if (user || user === null) {
-        setUser(false);
       }
     });
   }, []);
@@ -28,9 +30,18 @@ function Initialize() {
       <button type="button" onClick={signInUser}>
         sign in
       </button>
-      <button type="button" onClick={signOutUser}>
+      <button
+        type="button"
+        onClick={() => {
+          signOutUser().then(() => {
+            history.push('/');
+          });
+        }}
+      >
         sign out
       </button>
+      <NavButtonGroup />
+      <Routes user={user} />
     </>
   );
 }
