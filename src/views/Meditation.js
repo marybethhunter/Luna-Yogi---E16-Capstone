@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getDailyMeditation } from '../api/data/meditationData';
+import getDailyMeditation from '../api/data/meditationData';
 
 export default function Meditation() {
   const [meditation, setMeditation] = useState({});
@@ -7,18 +7,18 @@ export default function Meditation() {
   const getMeditation = () => {
     getDailyMeditation().then((obj) => {
       setMeditation({
-        meditation_title: obj.meditation_title,
-        meditation_duration: obj.meditation_duration,
-        meditation_subtitle: obj.meditation_subtitle,
-        meditation_image: obj.meditation_image,
-        meditation_url: obj.meditation_url,
+        meditation_title: obj.meditation[0].meditation_title,
+        meditation_duration: obj.meditation[0].meditation_duration,
+        meditation_subtitle: obj.meditation[0].meditation_subtitle,
+        meditation_image: obj.meditation[0].meditation_image,
+        meditation_url: obj.meditation[0].meditation_url,
       });
     });
   };
 
   return (
     <div className="card">
-      <div className="card-header">Daily Meditation</div>
+      <div className="card-header">Meditation</div>
       <div className="card-body">
         <h5 className="card-title">
           Click to get your daily meditation from Luna Yogi!
