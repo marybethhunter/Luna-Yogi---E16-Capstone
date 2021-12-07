@@ -1,6 +1,6 @@
 import axios from 'axios';
 import firebase from 'firebase/app';
-import { firebaseConfig } from '../apiKeys';
+import firebaseConfig from '../apiKeys';
 
 const dbUrl = firebaseConfig.databaseURL;
 

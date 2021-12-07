@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/index.scss';
 import firebase from 'firebase/app';
 import Initialize from './Initialize';
-import { firebaseConfig } from './api/apiKeys';
+import firebaseConfig from './api/apiKeys';
 import reportWebVitals from './reportWebVitals';
 
 import 'bootstrap/dist/css/bootstrap.min.css';

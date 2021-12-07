@@ -16,11 +16,15 @@ const getSpecificFlow = (categoryId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getPosesByCategoryName = (categoryShortName) => new Promise((resolve, reject) => {
+const getAllPoses = () => new Promise((resolve, reject) => {
   axios
-    .get(`${dbUrl}/yoga_poses?yoga_category_short_name=${categoryShortName}`)
-    .then((response) => resolve(response.data))
+    .get(`${dbUrl}/yoga_poses`)
+    .then((response) => {
+      let poseObj = Object.values(response.data);
+      poseObj = poseObj.shift();
+      resolve(poseObj);
+    })
     .catch(reject);
 });
 
-export { getRandomFlow, getSpecificFlow, getPosesByCategoryName };
+export { getRandomFlow, getSpecificFlow, getAllPoses };

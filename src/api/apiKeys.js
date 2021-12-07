@@ -9,8 +9,4 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-const deepMeditate = {
-  api_key: process.env.REACT_APP_DEEPMEDITATE_API_KEY,
-};
-
-export { firebaseConfig, deepMeditate };
+export default firebaseConfig;
