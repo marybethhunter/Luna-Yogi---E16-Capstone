@@ -10,7 +10,7 @@ const firebaseConfig = {
 };
 
 const deepMeditate = {
-  key: process.env.REACT_APP_DEEPMEDITATE_API_KEY,
+  api_key: process.env.REACT_APP_DEEPMEDITATE_API_KEY,
 };
 
 export { firebaseConfig, deepMeditate };
