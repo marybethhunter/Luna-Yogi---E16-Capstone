@@ -1,6 +1,8 @@
 import axios from 'axios';
+import firebaseConfig from '../apiKeys';
 
 const dbUrl = 'https://lightning-yoga-api.herokuapp.com/';
+const fbUrl = firebaseConfig.databaseURL;
 
 const getRandomFlow = (numBt1and12) => new Promise((resolve, reject) => {
   axios
@@ -27,4 +29,25 @@ const getAllPoses = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-export { getRandomFlow, getSpecificFlow, getAllPoses };
+// const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
+//   axios.post(`${dbUrl}/flows.json`, flowObj)
+//     .then((response) => {
+//       const flowId = response.data.name;
+//       axios.patch(`${dbUrl}/flows/${flowId}`, { flowId })
+//         .then(resolve);
+//     }).catch(reject);
+// });
+
+const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${fbUrl}/poses.json`, poseObj)
+    .then((response) => {
+      const poseId = response.data.name;
+      axios.patch(`${fbUrl}/poses/${poseId}.json`, { poseId }).then(resolve);
+    })
+    .catch(reject);
+});
+
+export {
+  getRandomFlow, getSpecificFlow, getAllPoses, addPoseToDB,
+};

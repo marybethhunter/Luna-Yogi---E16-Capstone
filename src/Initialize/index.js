@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { signInUser, signOutUser } from '../api/auth';
+import { createUserObj } from '../api/data/userData';
 import Routes from '../routes';
 import NavButtonGroup from '../components/NavButtonGroup';
 
@@ -20,6 +21,12 @@ function Initialize() {
           isAdmin: process.env.REACT_APP_ADMIN_UID === authed.uid,
         };
         setUser(userObj);
+        createUserObj(userObj);
+      }
+      if (user) {
+        setUser(user);
+      } else if (user === null) {
+        setUser(false);
       }
     });
   }, []);

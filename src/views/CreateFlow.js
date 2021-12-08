@@ -9,17 +9,20 @@ const DivStyle = styled.div`
   flex-wrap: wrap;
 `;
 
-// const getSearchPoses = (searchValue, poses) => {
-//   if (!searchValue) {
-//     return poses;
-//   }
-//   return poses.filter((pose) => pose.english_name.toLowerCase().includes(searchValue) || pose.sanskrit_name.toLowerCase().includes(searchValue));
-// };
+const getSearchItems = (searchValue, poses) => {
+  if (!searchValue) {
+    return poses;
+  }
+  return poses.filter(
+    (pose) => pose.english_name.toLowerCase().includes(searchValue)
+      || pose.sanskrit_name.toLowerCase().includes(searchValue),
+  );
+};
 
 export default function CreateFlow({ user }) {
   const [poses, setPoses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  // const searchItems = getSearchPoses(searchValue, poses);
+  const searchTerms = getSearchItems(searchValue, poses);
 
   useEffect(() => {
     let isMounted = true;
@@ -52,27 +55,20 @@ export default function CreateFlow({ user }) {
           />
         </div>
       </div>
-      <DivStyle>
-        {poses
-          .filter((pose) => {
-            if (searchValue === '') {
-              return poses;
-            }
-            pose.english_name.toLowerCase().includes(searchValue.toLowerCase());
-            return poses;
-          })
-          .map((pose) => (
+      {searchTerms ? (
+        <DivStyle>
+          {searchTerms.map((term) => (
             <PoseCard
-              key={pose.id}
-              pose={pose}
+              key={term.id}
+              pose={term}
               setPoses={setPoses}
               user={user}
             />
           ))}
-      </DivStyle>
-      {/* {poses.map((pose) => (
-        <PoseCard key={pose.id} pose={pose} setPoses={setPoses} user={user} poses={searchItems} />
-      ))} */}
+        </DivStyle>
+      ) : (
+        <h2>Pose Not Found</h2>
+      )}
     </div>
   );
 }

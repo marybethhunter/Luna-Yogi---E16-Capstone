@@ -20,4 +20,19 @@ const getUserByUid = (uid) => new Promise((resolve, reject) => {
   // resolve(currentUserInfo);
 });
 
-export { getCurrentUsersUid, getUserByUid };
+const createUserObj = (obj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${dbUrl}/users.json`, obj)
+    .then((response) => {
+      const firebaseKey = response.data.name;
+      axios.patch(`${dbUrl}/users/${firebaseKey}.json`, { firebaseKey });
+    })
+    .then(resolve)
+    .catch(reject);
+});
+
+// adding user's uid to the flow
+// also add flow to fb
+// const addFlowToUser = ()
+
+export { getCurrentUsersUid, getUserByUid, createUserObj };
