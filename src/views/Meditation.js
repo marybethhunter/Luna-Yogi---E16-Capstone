@@ -18,23 +18,38 @@ export default function Meditation() {
 
   return (
     <div className="card">
-      <div className="card-header">Meditation</div>
       <div className="card-body">
-        <h5 className="card-title">
-          Click to get your daily meditation from Luna Yogi!
-        </h5>
-        <button
-          type="button"
-          className="btn btn success"
-          onClick={getMeditation}
-        >
-          Click Here!
-        </button>
-        <p className="card-text">{meditation.meditation_title}</p>
-        <p className="card-text">{meditation.meditation_duration}</p>
-        <p className="card-text">{meditation.meditation_subtitle}</p>
-        <p className="card-text">{meditation.meditation_image}</p>
-        <p className="card-text">{meditation.meditation_url}</p>
+        {meditation.meditation_title ? (
+          ''
+        ) : (
+          <>
+            <h5 className="card-title">
+              Click to get your daily meditation from Luna Yogi!
+            </h5>
+            <button
+              type="button"
+              className="btn btn success"
+              onClick={getMeditation}
+            >
+              Click Here!
+            </button>
+          </>
+        )}
+        <h1 className="card-text">{meditation.meditation_title}</h1>
+        <h4>{meditation.meditation_duration}</h4>
+        <h5 className="card-text">{meditation.meditation_subtitle}</h5>
+        <img
+          src={meditation.meditation_image}
+          alt={meditation.meditation_title}
+          style={{ width: '30rem' }}
+        />
+        {meditation.meditation_title ? (
+          <a href={meditation.meditation_url} target="_blank" rel="noreferrer">
+            Link to Meditation
+          </a>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );
