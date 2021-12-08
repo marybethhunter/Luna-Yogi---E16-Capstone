@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AdminBlogForm from '../components/forms/AdminBlogForm';
 import { getSinglePost } from '../api/data/blogData';
 
-export default function AdminEditBlog({ user }) {
+export default function AdminEditBlog({ admin }) {
   const [editPost, setEditPost] = useState({});
   const { postId } = useParams();
 
@@ -20,15 +20,15 @@ export default function AdminEditBlog({ user }) {
 
   return (
     <>
-      <AdminBlogForm obj={editPost} user={user} />
+      <AdminBlogForm obj={editPost} admin={admin} />
     </>
   );
 }
 
 AdminEditBlog.propTypes = {
-  user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 AdminEditBlog.defaultProps = {
-  user: null,
+  admin: null,
 };

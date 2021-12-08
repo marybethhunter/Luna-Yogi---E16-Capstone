@@ -4,20 +4,22 @@ import AdminRoutes from './AdminRoutes';
 import AuthedRoutes from './AuthedRoutes';
 import NonauthedRoutes from './NonauthedRoutes';
 
-export default function Routes({ user }) {
+export default function Routes({ user, admin }) {
   return (
     <>
-      {user?.isAdmin && <AdminRoutes user={user} />}
-      <AuthedRoutes user={user} />
-      <NonauthedRoutes user={user} />
+      {admin ? <AdminRoutes user={user} admin={admin} /> : ''}
+      <AuthedRoutes user={user} admin={admin} />
+      <NonauthedRoutes user={user} admin={admin} />
     </>
   );
 }
 
 Routes.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 Routes.defaultProps = {
   user: null,
+  admin: null,
 };

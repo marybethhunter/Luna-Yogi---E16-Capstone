@@ -8,44 +8,44 @@ import Mantra from '../views/Mantra';
 import Blog from '../views/Blog';
 import BlogDetails from '../views/BlogDetails';
 
-export default function NonauthedRoutes({ user }) {
+export default function NonauthedRoutes({ user, admin }) {
   return (
     <Switch>
       <Route
         user={user}
         exact
         path="/"
-        component={() => <Home user={user} />}
+        component={() => <Home user={user} admin={admin} />}
       />
       <Route
         user={user}
         exact
         path="/yoga"
-        component={() => <Yoga user={user} />}
+        component={() => <Yoga user={user} admin={admin} />}
       />
       <Route
         user={user}
         exact
         path="/meditation"
-        component={() => <Meditation user={user} />}
+        component={() => <Meditation user={user} admin={admin} />}
       />
       <Route
         user={user}
         exact
         path="/mantra"
-        component={() => <Mantra user={user} />}
+        component={() => <Mantra user={user} admin={admin} />}
       />
       <Route
         user={user}
         exact
         path="/blog"
-        component={() => <Blog user={user} />}
+        component={() => <Blog user={user} admin={admin} />}
       />
       <Route
         user={user}
         exact
         path="/blog/:blogKey"
-        component={() => <BlogDetails user={user} />}
+        component={() => <BlogDetails user={user} admin={admin} />}
       />
     </Switch>
   );
@@ -53,8 +53,10 @@ export default function NonauthedRoutes({ user }) {
 
 NonauthedRoutes.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 NonauthedRoutes.defaultProps = {
   user: null,
+  admin: null,
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { getAllPoses } from '../api/data/yogaData';
 import PoseCard from '../components/PoseCard';
 
@@ -19,7 +20,7 @@ const getSearchItems = (searchValue, poses) => {
   );
 };
 
-export default function CreateFlow({ user }) {
+export default function CreateFlow({ user, admin }) {
   const [poses, setPoses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const searchTerms = getSearchItems(searchValue, poses);
@@ -37,8 +38,12 @@ export default function CreateFlow({ user }) {
   return (
     <div>
       <h1>Add Poses to Custom Flow</h1>
+      <h3>
+        Click &apos;CREATE FLOW&apos; once you have selected your desired poses!
+      </h3>
       <div>
         <button type="button">CREATE FLOW</button>
+        {admin ? <Link to="/addpose">Add Pose</Link> : ''}
         <div className="input-group rounded" style={{ width: '20rem' }}>
           <span className="input-group-text border-0" id="search-addon">
             <i className="fas fa-search" />
@@ -63,6 +68,7 @@ export default function CreateFlow({ user }) {
               pose={term}
               setPoses={setPoses}
               user={user}
+              admin={admin}
             />
           ))}
         </DivStyle>
@@ -75,8 +81,10 @@ export default function CreateFlow({ user }) {
 
 CreateFlow.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 CreateFlow.defaultProps = {
   user: null,
+  admin: null,
 };

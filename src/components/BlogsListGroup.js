@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { deletePost } from '../api/data/blogData';
 
-export default function BlogsListGroup({ post, setPosts, user }) {
+export default function BlogsListGroup({ post, setPosts, admin }) {
   const handleClick = (method) => {
     if (method === 'delete') {
       deletePost(post.postId).then((postArray) => setPosts(postArray));
@@ -14,12 +14,13 @@ export default function BlogsListGroup({ post, setPosts, user }) {
     <>
       <div className="card">
         <div className="card-body">
+          <img src={post.image} alt="thumbnail" style={{ width: '8em' }} />
           <h5 className="card-title">{post.title}</h5>
           <p className="card-text">{post.date}</p>
           <a href={`/blog/${post.postId}`} className="btn btn-primary">
             Read Full Post
           </a>
-          {user?.isAdmin && (
+          {admin ? (
             <button
               type="button"
               className="btn btn danger"
@@ -27,8 +28,10 @@ export default function BlogsListGroup({ post, setPosts, user }) {
             >
               Delete Post
             </button>
+          ) : (
+            ''
           )}
-          {user?.isAdmin && (
+          {admin ? (
             <Link
               type="button"
               className="btn btn info"
@@ -36,6 +39,8 @@ export default function BlogsListGroup({ post, setPosts, user }) {
             >
               Edit Post
             </Link>
+          ) : (
+            ''
           )}
         </div>
       </div>
@@ -52,9 +57,9 @@ BlogsListGroup.propTypes = {
     content: PropTypes.string,
   }).isRequired,
   setPosts: PropTypes.func.isRequired,
-  user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 BlogsListGroup.defaultProps = {
-  user: null,
+  admin: null,
 };

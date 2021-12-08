@@ -21,7 +21,7 @@ export default function BlogDetails() {
       <div className="card-header">{post.title}</div>
       <div className="card-body">
         <blockquote className="blockquote mb-0">
-          <img src={post.image} alt={post.title} />
+          <img style={{ width: '30rem' }} src={post.image} alt={post.title} />
           <p>{post.date}</p>
           <p>{post.content}</p>
           <footer className="blockquote-footer">Mary Beth Hunter</footer>
