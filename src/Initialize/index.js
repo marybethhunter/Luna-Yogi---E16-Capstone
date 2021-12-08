@@ -3,30 +3,38 @@ import { useHistory } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import { signInUser, signOutUser } from '../api/auth';
-import { createUserObj } from '../api/data/userData';
 import Routes from '../routes';
 import NavButtonGroup from '../components/NavButtonGroup';
+import { createUserObj, checkUserExists } from '../api/data/userData';
 
 function Initialize() {
   const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((authed) => {
       if (authed) {
-        const userObj = {
-          fullName: authed.displayName,
-          email: authed.email,
-          uid: authed.uid,
-          isAdmin: process.env.REACT_APP_ADMIN_UID === authed.uid,
-        };
-        setUser(userObj);
-        createUserObj(userObj);
-      }
-      if (user) {
-        setUser(user);
-      } else if (user === null) {
-        setUser(false);
+        checkUserExists(authed).then((response) => {
+          const userObj = {
+            fullName: authed.displayName,
+            email: authed.email,
+            uid: authed.uid,
+          };
+          if (response === 'create user') {
+            createUserObj(userObj).then((newUser) => {
+              setUser(newUser);
+            });
+          } else {
+            setUser(response);
+          }
+          if (userObj.uid === process.env.REACT_APP_ADMIN_UID) {
+            setAdmin(userObj);
+          } else if (user || user === null) {
+            setUser(null);
+            setAdmin(null);
+          }
+        });
       }
     });
   }, []);
@@ -48,7 +56,7 @@ function Initialize() {
         sign out
       </button>
       <NavButtonGroup />
-      <Routes user={user} />
+      <Routes user={user} admin={admin} />
     </>
   );
 }

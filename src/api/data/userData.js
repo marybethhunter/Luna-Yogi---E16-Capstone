@@ -1,24 +1,7 @@
 import axios from 'axios';
-import firebase from 'firebase/app';
 import firebaseConfig from '../apiKeys';
 
 const dbUrl = firebaseConfig.databaseURL;
-
-const getCurrentUsersUid = () => firebase.auth().currentUser?.uid;
-
-const getUserByUid = (uid) => new Promise((resolve, reject) => {
-  axios
-    .get(`${dbUrl}/users.json?orderBy="uid"&equalTo="${uid}"`)
-    .then((response) => {
-      let currentUserInfo = Object.values(response.data);
-      currentUserInfo = currentUserInfo.shift();
-      const firebaseKey = Object.keys(response.data)[0];
-      resolve({ ...currentUserInfo, firebaseKey });
-    })
-    .catch(reject);
-  // const currentUserInfo = { uid };
-  // resolve(currentUserInfo);
-});
 
 const createUserObj = (obj) => new Promise((resolve, reject) => {
   axios
@@ -31,8 +14,28 @@ const createUserObj = (obj) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const filterByUid = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/users.json?orderBy="uid"&equalTo=${uid}`)
+    .then((response) => resolve(response.data))
+    .catch(reject);
+});
+
+const checkUserExists = (user) => new Promise((resolve) => {
+  axios
+    .get(`${dbUrl}/users.json?orderBy="uid"&equalTo="${user.uid}"`)
+    .then((response) => {
+      if (Object.values(response.data).length) {
+        const [foundUser] = Object.values(response.data);
+        resolve({ ...foundUser });
+      } else {
+        resolve('create user');
+      }
+    });
+});
+
 // adding user's uid to the flow
 // also add flow to fb
 // const addFlowToUser = ()
 
-export { getCurrentUsersUid, getUserByUid, createUserObj };
+export { createUserObj, filterByUid, checkUserExists };

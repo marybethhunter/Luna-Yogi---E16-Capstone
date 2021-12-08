@@ -1,66 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Account from '../views/Account';
 import CreateFlow from '../views/CreateFlow';
 import YogaDetails from '../views/YogaDetails';
 import MeditationDetails from '../views/MeditationDetails';
 import MantraDetails from '../views/MantraDetails';
 
-const PrivateRoute = ({ component: Component, user, ...rest }) => {
-  if (user === null) return user;
-
-  const routeChecker = (burrito) => (user?.isAdmin ? (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-    <Component {...burrito} user={user} />
-  ) : (
-    <Redirect to={{ pathname: '/', state: { from: burrito.location } }} />
-  ));
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Route {...rest} render={(props) => routeChecker(props)} />;
-};
-
-PrivateRoute.propTypes = {
-  component: PropTypes.func.isRequired,
-  user: PropTypes.shape(PropTypes.obj),
-};
-
-PrivateRoute.defaultProps = {
-  user: null,
-};
-
-export default function AuthedRoutes({ user }) {
+export default function AuthedRoutes({ user, admin }) {
   return (
     <Switch>
-      <PrivateRoute
+      <Route
         user={user}
+        admin={admin}
         exact
         path="/account/:uid"
-        component={() => <Account user={user} />}
+        component={() => <Account user={user} admin={admin} />}
       />
-      <PrivateRoute
+      <Route
         user={user}
+        admin={admin}
         exact
         path="/createflow"
-        component={() => <CreateFlow user={user} />}
+        component={() => <CreateFlow user={user} admin={admin} />}
       />
-      <PrivateRoute
+      <Route
         user={user}
+        admin={admin}
         exact
         path="/yoga/:yogaKey"
-        component={() => <YogaDetails user={user} />}
+        component={() => <YogaDetails user={user} admin={admin} />}
       />
-      <PrivateRoute
+      <Route
         user={user}
+        admin={admin}
         exact
         path="/meditation/:meditationKey"
-        component={() => <MeditationDetails user={user} />}
+        component={() => <MeditationDetails user={user} admin={admin} />}
       />
-      <PrivateRoute
+      <Route
         user={user}
+        admin={admin}
         exact
         path="/mantra/:mantraKey"
-        component={() => <MantraDetails user={user} />}
+        component={() => <MantraDetails user={user} admin={admin} />}
       />
     </Switch>
   );
@@ -68,8 +51,10 @@ export default function AuthedRoutes({ user }) {
 
 AuthedRoutes.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 AuthedRoutes.defaultProps = {
   user: null,
+  admin: null,
 };

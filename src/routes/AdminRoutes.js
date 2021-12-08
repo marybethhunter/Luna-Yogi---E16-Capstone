@@ -1,61 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import AdminEditBlog from '../views/AdminEditBlog';
 import AdminBlogForm from '../components/forms/AdminBlogForm';
 import AdminAddPoseForm from '../components/forms/AdminAddPoseForm';
 
-const PrivateRoute = ({ component: Component, user, ...rest }) => {
-  if (user === null) return user;
-
-  const routeChecker = (burrito) => (user?.isAdmin ? (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-    <Component {...burrito} user={user} />
-  ) : (
-    <Redirect to={{ pathname: '/', state: { from: burrito.location } }} />
-  ));
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Route {...rest} render={(props) => routeChecker(props)} />;
-};
-
-PrivateRoute.propTypes = {
-  component: PropTypes.func.isRequired,
-  user: PropTypes.shape(PropTypes.obj),
-};
-
-PrivateRoute.defaultProps = {
-  user: null,
-};
-
-export default function AdminRoutes({ user }) {
+export default function AdminRoutes({ admin }) {
   return (
     <Switch>
-      <PrivateRoute
-        user={user}
+      <Route
+        admin={admin}
         exact
         path="/editblog/:postId"
-        component={() => <AdminEditBlog user={user} />}
+        component={() => <AdminEditBlog admin={admin} />}
       />
-      <PrivateRoute
-        user={user}
+      <Route
+        admin={admin}
         exact
         path="/addblog"
-        component={() => <AdminBlogForm user={user} />}
+        component={() => <AdminBlogForm admin={admin} />}
       />
-      <PrivateRoute
-        user={user}
+      <Route
+        admin={admin}
         exact
         path="/addpose"
-        component={() => <AdminAddPoseForm user={user} />}
+        component={() => <AdminAddPoseForm admin={admin} />}
       />
     </Switch>
   );
 }
 
 AdminRoutes.propTypes = {
-  user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 AdminRoutes.defaultProps = {
-  user: null,
+  admin: null,
 };

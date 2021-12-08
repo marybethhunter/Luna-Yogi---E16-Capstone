@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { getAllPosts } from '../api/data/blogData';
 import BlogsListGroup from '../components/BlogsListGroup';
 
-export default function Blog({ user }) {
+export default function Blog({ user, admin }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function Blog({ user }) {
   }, []);
   return (
     <>
-      {user?.isAdmin && <Link to="/addblog">Add New Blog Post</Link>}
+      {admin ? <Link to="/addblog">Add New Blog Post</Link> : ''}
       <>
         {posts.map((post) => (
           <BlogsListGroup
@@ -26,6 +26,7 @@ export default function Blog({ user }) {
             post={post}
             setPosts={setPosts}
             user={user}
+            admin={admin}
           />
         ))}
       </>
@@ -35,8 +36,10 @@ export default function Blog({ user }) {
 
 Blog.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 Blog.defaultProps = {
   user: null,
+  admin: null,
 };
