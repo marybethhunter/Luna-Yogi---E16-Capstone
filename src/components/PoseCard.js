@@ -8,7 +8,8 @@ const CardStyle = styled.div`
 `;
 
 export default function PoseCard({ pose, user, setPoses }) {
-  const [formInput, setFormInput] = useState('');
+  const [formInput, setFormInput] = useState();
+
   console.warn(user);
   console.warn(setPoses);
 
@@ -21,7 +22,7 @@ export default function PoseCard({ pose, user, setPoses }) {
   };
 
   return (
-    <>
+    <div>
       <CardStyle className="card" style={{ width: '18rem' }}>
         <img
           className="card-img-top"
@@ -45,7 +46,7 @@ export default function PoseCard({ pose, user, setPoses }) {
           />
         </div>
       </CardStyle>
-    </>
+    </div>
   );
 }
 
@@ -55,6 +56,7 @@ PoseCard.propTypes = {
     english_name: PropTypes.string,
     img_url: PropTypes.string,
     id: PropTypes.number,
+    addedToPose: PropTypes.bool,
   }).isRequired,
   setPoses: PropTypes.func.isRequired,
   user: PropTypes.shape(PropTypes.obj),
