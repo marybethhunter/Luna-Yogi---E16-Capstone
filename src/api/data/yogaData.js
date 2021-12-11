@@ -48,6 +48,27 @@ const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const testCopying = () => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/yoga_poses`)
+    .then((response) => {
+      let poseObj = Object.values(response.data);
+      poseObj = poseObj.shift();
+      resolve(poseObj);
+      axios.post(`${fbUrl}/flows.json`, poseObj).then((res) => {
+        const flowId = res.data.name;
+        axios
+          .patch(`${fbUrl}/flows/${flowId}.json`, { flowId })
+          .then(resolve);
+      });
+    })
+    .catch(reject);
+});
+
 export {
-  getRandomFlow, getSpecificFlow, getAllPoses, addPoseToDB,
+  getRandomFlow,
+  getSpecificFlow,
+  getAllPoses,
+  addPoseToDB,
+  testCopying,
 };
