@@ -34,8 +34,24 @@ const checkUserExists = (user) => new Promise((resolve) => {
     });
 });
 
-// adding user's uid to the flow
-// also add flow to fb
-// const addFlowToUser = ()
+const getMeditationByUid = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/meditations.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
 
-export { createUserObj, filterByUid, checkUserExists };
+const getMantraByUid = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/mantras.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
+export {
+  createUserObj,
+  filterByUid,
+  checkUserExists,
+  getMeditationByUid,
+  getMantraByUid,
+};

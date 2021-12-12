@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 
-export default function NavButtonGroup() {
+export default function NavButtonGroup({ user }) {
   return (
     <ButtonGroup>
       <Button type="button" href="/">
@@ -19,6 +20,21 @@ export default function NavButtonGroup() {
       <Button type="button" href="/blog">
         Blog
       </Button>
+      {user ? (
+        <Button type="button" href={`/account/${user.uid}`}>
+          My Account
+        </Button>
+      ) : (
+        ''
+      )}
     </ButtonGroup>
   );
 }
+
+NavButtonGroup.propTypes = {
+  user: PropTypes.shape(PropTypes.obj),
+};
+
+NavButtonGroup.defaultProps = {
+  user: null,
+};
