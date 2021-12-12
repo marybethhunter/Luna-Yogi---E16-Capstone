@@ -1,8 +1,9 @@
 /* eslint-disable radix */
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { getAllPoses } from '../api/data/yogaData';
+import { getAllPoses, addCustomFlowToDB } from '../api/data/yogaData';
 
 const DivStyle = styled.div`
   display: flex;
@@ -26,12 +27,13 @@ const getSearchItems = (searchValue, poses) => {
   return filteredPosesBySearch;
 };
 
-export default function CreateFlow() {
+export default function CreateFlow({ user }) {
   const [poses, setPoses] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [formInput, setFormInput] = useState({});
   const [chosenPoses] = useState([]);
   const searchTerms = getSearchItems(searchValue, poses);
+  const history = useHistory();
 
   const handleChecked = (e) => {
     const { name, checked } = e.target;
@@ -69,6 +71,16 @@ export default function CreateFlow() {
     } else {
       chosenDiv.style.display = 'none';
     }
+  };
+
+  const saveCustomFlow = async () => {
+    addCustomFlowToDB({
+      ...chosenPoses,
+      userId: user.uid,
+      dateCreated: new Date().toString(),
+    }).then(() => {
+      history.push(`/account/${user.uid}`);
+    });
   };
 
   useEffect(() => {
@@ -150,7 +162,9 @@ export default function CreateFlow() {
         {chosenPoses ? (
           <>
             <h1>Custom Flow</h1>
-            <button type="button">Save Flow To Account</button>
+            <button type="button" onClick={saveCustomFlow}>
+              Save Flow To Account
+            </button>
             <DivStyle>
               {chosenPoses.map((pose) => (
                 <CardStyle
@@ -182,8 +196,10 @@ export default function CreateFlow() {
 
 CreateFlow.propTypes = {
   pose: PropTypes.shape({}),
+  user: PropTypes.shape(PropTypes.obj),
 };
 
 CreateFlow.defaultProps = {
   pose: {},
+  user: null,
 };

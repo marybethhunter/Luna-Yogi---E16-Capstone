@@ -45,6 +45,13 @@ const getAllPosesFromFB = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getSingleFlowfromFB = (flowId) => new Promise((resolve, reject) => {
+  axios
+    .get(`${fbUrl}/flows/${flowId}.json`)
+    .then((response) => resolve(response.data))
+    .catch(reject);
+});
+
 const getUserFlows = (uid) => new Promise((resolve, reject) => {
   axios
     .get(`${fbUrl}/flows/.json?orderBy="userId"&equalTo="${uid}"`)
@@ -53,6 +60,16 @@ const getUserFlows = (uid) => new Promise((resolve, reject) => {
 });
 
 const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${fbUrl}/flows.json`, flowObj)
+    .then((response) => {
+      const flowId = response.data.name;
+      axios.patch(`${fbUrl}/flows/${flowId}.json`, { flowId }).then(resolve);
+    })
+    .catch(reject);
+});
+
+const addCustomFlowToDB = (flowObj) => new Promise((resolve, reject) => {
   axios
     .post(`${fbUrl}/flows.json`, flowObj)
     .then((response) => {
@@ -80,5 +97,7 @@ export {
   addFlowToDB,
   getAllPosesFromFB,
   getSingleFlow,
+  addCustomFlowToDB,
   getUserFlows,
+  getSingleFlowfromFB,
 };

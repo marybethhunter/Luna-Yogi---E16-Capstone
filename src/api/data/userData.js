@@ -48,10 +48,18 @@ const getMantraByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getFlowByUid = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/flows.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
 export {
   createUserObj,
   filterByUid,
   checkUserExists,
   getMeditationByUid,
   getMantraByUid,
+  getFlowByUid,
 };
