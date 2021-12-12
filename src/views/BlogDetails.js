@@ -18,7 +18,10 @@ export default function BlogDetails() {
 
   return (
     <div className="card">
-      <div className="card-header">{post.title}</div>
+      <div className="card-header">
+        {post.title}
+        <button type="button">Save Blog Post To Account</button>
+      </div>
       <div className="card-body">
         <blockquote className="blockquote mb-0">
           <img style={{ width: '30rem' }} src={post.image} alt={post.title} />

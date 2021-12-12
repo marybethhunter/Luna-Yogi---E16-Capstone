@@ -6,6 +6,7 @@ import CreateFlow from '../views/CreateFlow';
 import YogaDetails from '../views/YogaDetails';
 import MeditationDetails from '../views/MeditationDetails';
 import MantraDetails from '../views/MantraDetails';
+import CreateCustom from '../views/CreateCustom';
 
 export default function AuthedRoutes({ user, admin }) {
   return (
@@ -28,8 +29,15 @@ export default function AuthedRoutes({ user, admin }) {
         user={user}
         admin={admin}
         exact
-        path="/yoga/:yogaKey"
+        path="/flows/:flowKey"
         component={() => <YogaDetails user={user} admin={admin} />}
+      />
+      <Route
+        user={user}
+        admin={admin}
+        exact
+        path="/yogadetails"
+        component={() => <CreateCustom user={user} admin={admin} />}
       />
       <Route
         user={user}

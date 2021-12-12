@@ -140,7 +140,6 @@ export default function Yoga({ user }) {
                   onChange={handleChange}
                   onClick={() => {
                     handleDropdownClick();
-                    console.warn(randomFlow);
                   }}
                 >
                   <option value="">Select Flow By Type</option>

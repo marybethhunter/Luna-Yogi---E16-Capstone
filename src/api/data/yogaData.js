@@ -4,6 +4,7 @@ import firebaseConfig from '../apiKeys';
 const dbUrl = 'https://lightning-yoga-api.herokuapp.com/';
 const fbUrl = firebaseConfig.databaseURL;
 
+// lightning yoga api
 const getRandomFlow = (numBt1and12) => new Promise((resolve, reject) => {
   axios
     .get(`${dbUrl}/yoga_categories/${numBt1and12}`)
@@ -29,14 +30,37 @@ const getAllPoses = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-// const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
-//   axios.post(`${dbUrl}/flows.json`, flowObj)
-//     .then((response) => {
-//       const flowId = response.data.name;
-//       axios.patch(`${dbUrl}/flows/${flowId}`, { flowId })
-//         .then(resolve);
-//     }).catch(reject);
-// });
+const getSingleFlow = (flowId) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/flows/${flowId}.json`)
+    .then((response) => resolve(response.data))
+    .catch(reject);
+});
+
+// firebase
+const getAllPosesFromFB = () => new Promise((resolve, reject) => {
+  axios
+    .get(`${fbUrl}/poses.json`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
+const getUserFlows = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${fbUrl}/flows/.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch((error) => reject(error));
+});
+
+const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${fbUrl}/flows.json`, flowObj)
+    .then((response) => {
+      const flowId = response.data.name;
+      axios.patch(`${fbUrl}/flows/${flowId}.json`, { flowId }).then(resolve);
+    })
+    .catch(reject);
+});
 
 const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
   axios
@@ -48,27 +72,13 @@ const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const testCopying = () => new Promise((resolve, reject) => {
-  axios
-    .get(`${dbUrl}/yoga_poses`)
-    .then((response) => {
-      let poseObj = Object.values(response.data);
-      poseObj = poseObj.shift();
-      resolve(poseObj);
-      axios.post(`${fbUrl}/flows.json`, poseObj).then((res) => {
-        const flowId = res.data.name;
-        axios
-          .patch(`${fbUrl}/flows/${flowId}.json`, { flowId })
-          .then(resolve);
-      });
-    })
-    .catch(reject);
-});
-
 export {
   getRandomFlow,
   getSpecificFlow,
   getAllPoses,
   addPoseToDB,
-  testCopying,
+  addFlowToDB,
+  getAllPosesFromFB,
+  getSingleFlow,
+  getUserFlows,
 };

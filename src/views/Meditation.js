@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import getDailyMeditation from '../api/data/meditationData';
+import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import {
+  addMeditationToDB,
+  getDailyMeditation,
+} from '../api/data/meditationData';
 
-export default function Meditation() {
+export default function Meditation({ user }) {
   const [meditation, setMeditation] = useState({});
+  const history = useHistory();
 
   const getMeditation = () => {
     getDailyMeditation().then((obj) => {
@@ -16,25 +22,15 @@ export default function Meditation() {
     });
   };
 
+  const saveMeditation = () => {
+    addMeditationToDB({ ...meditation, userId: user.uid }).then(() => {
+      history.push(`/account/${user.uid}`);
+    });
+  };
+
   return (
     <div className="card">
       <div className="card-body">
-        {meditation.meditation_title ? (
-          ''
-        ) : (
-          <>
-            <h5 className="card-title">
-              Click to get your daily meditation from Luna Yogi!
-            </h5>
-            <button
-              type="button"
-              className="btn btn success"
-              onClick={getMeditation}
-            >
-              Click Here!
-            </button>
-          </>
-        )}
         <h1 className="card-text">{meditation.meditation_title}</h1>
         <h4>{meditation.meditation_duration}</h4>
         <h5 className="card-text">{meditation.meditation_subtitle}</h5>
@@ -50,7 +46,33 @@ export default function Meditation() {
         ) : (
           ''
         )}
+        {meditation.meditation_title ? (
+          <button type="button" onClick={saveMeditation}>
+            Save Meditation To Account
+          </button>
+        ) : (
+          <>
+            <h5 className="card-title">
+              Click to get your daily meditation from Luna Yogi!
+            </h5>
+            <button
+              type="button"
+              className="btn btn success"
+              onClick={getMeditation}
+            >
+              Click Here!
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
 }
+
+Meditation.propTypes = {
+  user: PropTypes.shape(PropTypes.obj),
+};
+
+Meditation.defaultProps = {
+  user: null,
+};
