@@ -55,6 +55,46 @@ const getFlowByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getUserFlows = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/flows/.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch((error) => reject(error));
+});
+
+const getMostRecentFlow = (uid) => new Promise((resolve, reject) => {
+  getUserFlows(uid)
+    .then((allFlows) => {
+      const newestFlow = allFlows.reduce((a, b) => (a.dateCreated > b.dateCreated ? a : b));
+      resolve(newestFlow);
+    })
+    .catch(reject);
+});
+
+const addBlogFBKey = (blogId, uid) => new Promise((resolve, reject) => {
+  axios
+    .post(`${dbUrl}/userJoinBlogPosts.json`, blogId)
+    .then((response) => {
+      const firebaseKey = response.data.name;
+      axios
+        .patch(
+          `${dbUrl}/userJoinBlogPosts/${firebaseKey}.json`,
+          { firebaseKey },
+          uid,
+          blogId,
+        )
+        .then(resolve);
+    })
+    .catch(reject);
+});
+
+const getBlogsByUid = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/blog.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
 export {
   createUserObj,
   filterByUid,
@@ -62,4 +102,8 @@ export {
   getMeditationByUid,
   getMantraByUid,
   getFlowByUid,
+  getMostRecentFlow,
+  getUserFlows,
+  addBlogFBKey,
+  getBlogsByUid,
 };

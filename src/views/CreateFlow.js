@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { getAllPoses, addCustomFlowToDB } from '../api/data/yogaData';
+import { getAllPoses, addPoseToDB, addFlowToDB } from '../api/data/yogaData';
+import { getMostRecentFlow } from '../api/data/userData';
 
 const DivStyle = styled.div`
   display: flex;
@@ -32,8 +33,16 @@ export default function CreateFlow({ user }) {
   const [searchValue, setSearchValue] = useState('');
   const [formInput, setFormInput] = useState({});
   const [chosenPoses] = useState([]);
+  const [flow, setFlow] = useState([]);
   const searchTerms = getSearchItems(searchValue, poses);
   const history = useHistory();
+
+  let count = 0;
+
+  const addOne = () => {
+    count += 1;
+    return count;
+  };
 
   const handleChecked = (e) => {
     const { name, checked } = e.target;
@@ -47,39 +56,50 @@ export default function CreateFlow({ user }) {
         (pose) => pose.id === parseInt(e.target.id),
       );
       chosenPoses.push(checkedPose);
-      console.warn(checkedPose);
+      setFlow(chosenPoses);
+      // console.warn(checkedPose);
     }
-    console.warn(chosenPoses);
+    // console.warn(chosenPoses);
   };
 
   const handleClick = () => {
-    const searchDiv = document.getElementById('search');
-    if (searchDiv.style.display === 'none') {
-      searchDiv.style.display = 'block';
-    } else {
-      searchDiv.style.display = 'none';
-    }
-    const headingDiv = document.getElementById('heading');
-    if (headingDiv.style.display === 'none') {
-      headingDiv.style.display = 'block';
-    } else {
-      headingDiv.style.display = 'none';
-    }
-    const chosenDiv = document.getElementById('chosen');
-    if (chosenDiv.style.display === 'none') {
-      chosenDiv.style.display = 'block';
-    } else {
-      chosenDiv.style.display = 'none';
-    }
-  };
-
-  const saveCustomFlow = async () => {
-    addCustomFlowToDB({
-      ...chosenPoses,
+    addFlowToDB({
+      flow,
       userId: user.uid,
       dateCreated: new Date().toString(),
     }).then(() => {
-      history.push(`/account/${user.uid}`);
+      const searchDiv = document.getElementById('search');
+      if (searchDiv.style.display === 'none') {
+        searchDiv.style.display = 'block';
+      } else {
+        searchDiv.style.display = 'none';
+      }
+      const headingDiv = document.getElementById('heading');
+      if (headingDiv.style.display === 'none') {
+        headingDiv.style.display = 'block';
+      } else {
+        headingDiv.style.display = 'none';
+      }
+      const chosenDiv = document.getElementById('chosen');
+      if (chosenDiv.style.display === 'none') {
+        chosenDiv.style.display = 'block';
+      } else {
+        chosenDiv.style.display = 'none';
+      }
+    });
+  };
+
+  const saveCustomPoses = async () => {
+    const flowIdToAdd = await getMostRecentFlow(user.uid);
+    chosenPoses.forEach((chosenPose) => {
+      const newId = addOne();
+      addPoseToDB({
+        ...chosenPose,
+        flowId: flowIdToAdd.flowId,
+        orderNumber: newId,
+      }).then(() => {
+        history.push(`/account/${user.uid}`);
+      });
     });
   };
 
@@ -162,7 +182,7 @@ export default function CreateFlow({ user }) {
         {chosenPoses ? (
           <>
             <h1>Custom Flow</h1>
-            <button type="button" onClick={saveCustomFlow}>
+            <button type="button" onClick={saveCustomPoses}>
               Save Flow To Account
             </button>
             <DivStyle>

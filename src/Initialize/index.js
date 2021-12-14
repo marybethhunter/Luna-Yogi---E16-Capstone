@@ -21,6 +21,9 @@ function Initialize() {
             email: authed.email,
             uid: authed.uid,
           };
+          if (userObj.uid === process.env.REACT_APP_ADMIN_UID) {
+            setAdmin(userObj);
+          }
           if (response === 'create user') {
             createUserObj(userObj).then((newUser) => {
               setUser(newUser);
@@ -28,13 +31,10 @@ function Initialize() {
           } else {
             setUser(response);
           }
-          if (userObj.uid === process.env.REACT_APP_ADMIN_UID) {
-            setAdmin(userObj);
-          } else if (user || user === null) {
-            setUser(null);
-            setAdmin(null);
-          }
         });
+      } else if (user || user === null) {
+        setUser(null);
+        setAdmin(null);
       }
     });
   }, []);
@@ -42,22 +42,37 @@ function Initialize() {
   return (
     // have logo/header and button group here and then the footer below
     <>
+      {/* {user === null ? (
+        <h1>Loading...</h1>
+      ) : (
+        <>
+          <NavButtonGroup user={user} admin={admin} />
+          {user ? (
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => {
+                signOutUser().then(() => {
+                  history.push('/');
+                });
+              }}
+            >
+              sign out
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={signInUser}
+            >
+              sign in
+            </button>
+          )}
+          <Routes user={user} admin={admin} />
+        </>
+      )} */}
       <NavButtonGroup user={user} admin={admin} />
-      <button type="button" className="btn btn-success" onClick={signInUser}>
-        sign in
-      </button>
-      <button
-        type="button"
-        className="btn btn-danger"
-        onClick={() => {
-          signOutUser().then(() => {
-            history.push('/');
-          });
-        }}
-      >
-        sign out
-      </button>
-      {/* {user ? (
+      {user ? (
         <button
           type="button"
           className="btn btn-danger"
@@ -70,14 +85,10 @@ function Initialize() {
           sign out
         </button>
       ) : (
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={signInUser}
-        >
+        <button type="button" className="btn btn-success" onClick={signInUser}>
           sign in
         </button>
-      )} */}
+      )}
       <Routes user={user} admin={admin} />
     </>
   );

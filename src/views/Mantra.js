@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import { addMantraToDB, getAffirmation } from '../api/data/affirmationData';
 
 export default function Mantra({ user }) {
   const [affirmation, setAffirmation] = useState({});
-  const history = useHistory();
 
   const getDailyAffirmation = () => {
     getAffirmation().then((obj) => {
@@ -16,9 +14,7 @@ export default function Mantra({ user }) {
   };
 
   const saveMantra = () => {
-    addMantraToDB({ ...affirmation, userId: user.uid }).then(() => {
-      history.push(`/account/${user.uid}`);
-    });
+    addMantraToDB({ ...affirmation, userId: user.uid });
   };
 
   return (
