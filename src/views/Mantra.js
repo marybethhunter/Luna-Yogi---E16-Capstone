@@ -22,9 +22,15 @@ export default function Mantra({ user }) {
       <div className="card-body">
         <h2 className="card-text">{affirmation.affirmation}</h2>
         {affirmation.affirmation ? (
-          <button type="button" onClick={saveMantra}>
-            Save Affirmation To Account
-          </button>
+          <>
+            {user ? (
+              <button type="button" onClick={saveMantra}>
+                Save Affirmation To Account
+              </button>
+            ) : (
+              ''
+            )}
+          </>
         ) : (
           <>
             <h5 className="card-title">

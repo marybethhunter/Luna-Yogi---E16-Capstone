@@ -43,9 +43,15 @@ export default function Meditation({ user }) {
           ''
         )}
         {meditation.meditation_title ? (
-          <button type="button" onClick={saveMeditation}>
-            Save Meditation To Account
-          </button>
+          <>
+            {user ? (
+              <button type="button" onClick={saveMeditation}>
+                Save Meditation To Account
+              </button>
+            ) : (
+              ''
+            )}
+          </>
         ) : (
           <>
             <h5 className="card-title">

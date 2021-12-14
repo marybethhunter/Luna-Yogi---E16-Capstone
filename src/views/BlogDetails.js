@@ -26,9 +26,15 @@ export default function BlogDetails({ user }) {
     <div className="card">
       <div className="card-header">
         {post.title}
-        <button type="button" onClick={saveUserIDToPost}>
-          Save Blog Post To Account
-        </button>
+        <>
+          {user ? (
+            <button type="button" onClick={saveUserIDToPost}>
+              Save Blog Post To Account
+            </button>
+          ) : (
+            ''
+          )}
+        </>
       </div>
       <div className="card-body">
         <blockquote className="blockquote mb-0">
