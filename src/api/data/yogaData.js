@@ -45,14 +45,30 @@ const getAllPosesFromFB = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getUserFlows = (uid) => new Promise((resolve, reject) => {
+const getSingleFlowfromFB = (flowId) => new Promise((resolve, reject) => {
   axios
-    .get(`${fbUrl}/flows/.json?orderBy="userId"&equalTo="${uid}"`)
-    .then((response) => resolve(Object.values(response.data)))
-    .catch((error) => reject(error));
+    .get(`${fbUrl}/flows/${flowId}.json`)
+    .then((response) => {
+      let flowInfo = Object.values(response.data);
+      flowInfo = flowInfo.shift();
+      resolve({ ...flowInfo });
+    })
+    .catch(reject);
 });
 
 const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${fbUrl}/flows.json`, flowObj)
+    .then((response) => {
+      const flowId = response.data.name;
+      axios.patch(`${fbUrl}/flows/${flowId}.json`, { flowId }).then(() => {
+        resolve(Object.values(response.data));
+      });
+    })
+    .catch(reject);
+});
+
+const addCustomFlowToDB = (flowObj) => new Promise((resolve, reject) => {
   axios
     .post(`${fbUrl}/flows.json`, flowObj)
     .then((response) => {
@@ -72,6 +88,20 @@ const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getFlowId = (flowId) => new Promise((resolve, reject) => {
+  axios
+    .get(`${fbUrl}/flows.json?orderBy="flowId"&equalTo="${flowId}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
+const getPosesByFlowId = (flowId) => new Promise((resolve, reject) => {
+  axios
+    .get(`${fbUrl}/poses.json?orderBy="flowId"&equalTo="${flowId}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
 export {
   getRandomFlow,
   getSpecificFlow,
@@ -80,5 +110,8 @@ export {
   addFlowToDB,
   getAllPosesFromFB,
   getSingleFlow,
-  getUserFlows,
+  addCustomFlowToDB,
+  getSingleFlowfromFB,
+  getFlowId,
+  getPosesByFlowId,
 };

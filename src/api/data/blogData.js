@@ -43,6 +43,18 @@ const getSinglePost = (postId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const updatePostWithUserId = (postId, userId) => new Promise((resolve, reject) => {
+  axios
+    .patch(`${dbUrl}/blog/${postId}.json`, userId)
+    .then(() => getAllPosts().then(resolve))
+    .catch(reject);
+});
+
 export {
-  getAllPosts, deletePost, addNewPost, updatePost, getSinglePost,
+  getAllPosts,
+  deletePost,
+  addNewPost,
+  updatePost,
+  getSinglePost,
+  updatePostWithUserId,
 };

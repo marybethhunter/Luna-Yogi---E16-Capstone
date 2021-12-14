@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { getSinglePost } from '../api/data/blogData';
+import { getSinglePost, updatePostWithUserId } from '../api/data/blogData';
+// import { addBlogFBKey } from '../api/data/userData';
 
-export default function BlogDetails() {
+export default function BlogDetails({ user }) {
   const [post, setPost] = useState({});
   const { blogKey } = useParams();
 
+  const saveUserIDToPost = () => {
+    updatePostWithUserId(blogKey, { userId: user.uid });
+  };
+
   useEffect(() => {
     let isMounted = true;
-    if (isMounted) {
-      getSinglePost(blogKey).then(setPost);
-    }
+    getSinglePost(blogKey).then((postArray) => {
+      if (isMounted) setPost(postArray);
+    });
     return () => {
       isMounted = false;
     };
@@ -20,7 +26,9 @@ export default function BlogDetails() {
     <div className="card">
       <div className="card-header">
         {post.title}
-        <button type="button">Save Blog Post To Account</button>
+        <button type="button" onClick={saveUserIDToPost}>
+          Save Blog Post To Account
+        </button>
       </div>
       <div className="card-body">
         <blockquote className="blockquote mb-0">
@@ -33,3 +41,11 @@ export default function BlogDetails() {
     </div>
   );
 }
+
+BlogDetails.propTypes = {
+  user: PropTypes.shape(PropTypes.obj),
+};
+
+BlogDetails.defaultProps = {
+  user: null,
+};

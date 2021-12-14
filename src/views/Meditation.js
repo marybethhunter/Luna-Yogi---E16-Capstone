@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import {
   addMeditationToDB,
   getDailyMeditation,
@@ -8,7 +7,6 @@ import {
 
 export default function Meditation({ user }) {
   const [meditation, setMeditation] = useState({});
-  const history = useHistory();
 
   const getMeditation = () => {
     getDailyMeditation().then((obj) => {
@@ -23,9 +21,7 @@ export default function Meditation({ user }) {
   };
 
   const saveMeditation = () => {
-    addMeditationToDB({ ...meditation, userId: user.uid }).then(() => {
-      history.push(`/account/${user.uid}`);
-    });
+    addMeditationToDB({ ...meditation, userId: user.uid });
   };
 
   return (
