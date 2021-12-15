@@ -1,40 +1,237 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { signInUser } from '../api/auth';
-import { getRandomFlow, getSpecificFlow } from '../api/data/yogaData';
+import {
+  addFlowToDB,
+  getRandomFlow,
+  getSpecificFlow,
+  getPosesFromCategory,
+  addPoseToDB,
+  addPresetFlowPosesToFB,
+} from '../api/data/yogaData';
+import { getMostRecentFlow } from '../api/data/userData';
+
+// const corePoses = getPosesFromCategory('core_yoga_poses');
+const seatedPoses = getPosesFromCategory('seated_yoga_poses');
+const strengthPoses = getPosesFromCategory('strengthening_yoga_poses');
+const chestPoses = getPosesFromCategory('chest_opening_yoga_poses');
+const backbendPoses = getPosesFromCategory('yoga_backbends');
+const forwardPoses = getPosesFromCategory('forward_bend_yoga_poses');
+const hipOpenPoses = getPosesFromCategory('hip_opening_yoga_poses');
+const standingPoses = getPosesFromCategory('standing_yoga_poses');
+const restorePoses = getPosesFromCategory('restorative_yoga_poses');
+const armBalPoses = getPosesFromCategory('arm_balance_yoga_poses');
+const balPoses = getPosesFromCategory('balancing_yoga_poses');
+const inversionPoses = getPosesFromCategory('inversion_yoga_poses');
 
 export default function Yoga({ user }) {
   const [randomFlow, setRandomFlow] = useState({});
   const [formInput, setFormInput] = useState('');
   const [categoryFlow, setCategoryFlow] = useState({});
+  const [savedCorePoses] = useState([]);
+  const [savedSeatedPoses] = useState(seatedPoses);
+  const [savedStrengthPoses] = useState(strengthPoses);
+  const [savedChestPoses] = useState(chestPoses);
+  const [savedBackbendPoses] = useState(backbendPoses);
+  const [savedForwardBendPoses] = useState(forwardPoses);
+  const [savedHipOpeningPoses] = useState(hipOpenPoses);
+  const [savedStandingPoses] = useState(standingPoses);
+  const [savedRestorativePoses] = useState(restorePoses);
+  const [savedArmBalancePoses] = useState(armBalPoses);
+  const [savedBalancingPoses] = useState(balPoses);
+  const [savedInversionPoses] = useState(inversionPoses);
+  const history = useHistory();
 
   console.warn(formInput);
+  const corePoses = getPosesFromCategory('core_yoga_poses');
+
+  let count = 0;
+
+  const addOne = () => {
+    count += 1;
+    return count;
+  };
 
   const getNumBt1and12 = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
   const getARandomFlow = () => {
-    getRandomFlow(getNumBt1and12(1, 12)).then((flowObj) => {
-      setRandomFlow({
-        flowId: flowObj.id,
-        name: flowObj.name,
-        short_name: flowObj.short_name,
-        description: flowObj.description,
-        poses: flowObj.yoga_poses,
+    addFlowToDB({
+      randomFlow,
+      userId: user.uid,
+      dateCreated: new Date().toString(),
+    }).then(() => {
+      getRandomFlow(getNumBt1and12(1, 12)).then((flowObj) => {
+        setRandomFlow({
+          flowId: flowObj.id,
+          name: flowObj.name,
+          short_name: flowObj.short_name,
+          description: flowObj.description,
+          poses: flowObj.yoga_poses,
+        });
       });
     });
   };
 
   const getCategoryFlow = (num) => {
-    getSpecificFlow(num).then((flowObject) => {
-      setCategoryFlow({
-        flowId: flowObject.id,
-        name: flowObject.name,
-        short_name: flowObject.short_name,
-        description: flowObject.description,
-        poses: flowObject.yoga_poses,
+    addFlowToDB({
+      categoryFlow,
+      userId: user.uid,
+      dateCreated: new Date().toString(),
+    }).then(() => {
+      getSpecificFlow(num).then((flowObject) => {
+        setCategoryFlow({
+          flowId: flowObject.id,
+          name: flowObject.name,
+          short_name: flowObject.short_name,
+          description: flowObject.description,
+          poses: flowObject.yoga_poses,
+        });
       });
     });
+  };
+
+  savedCorePoses.push(corePoses);
+
+  const handleRandomSelectedCore = async () => {
+    const flowIdToAdd = await getMostRecentFlow(user.uid);
+    // savedCorePoses.push(corePoses);
+    savedCorePoses.forEach((pose) => {
+      const newId = addOne();
+      addPresetFlowPosesToFB(1, {
+        ...pose,
+        flowId: flowIdToAdd.flowId,
+        orderNumber: newId,
+      }).then(() => {
+        // history.push(`/account/${user.uid}`);
+        console.warn(savedCorePoses);
+      });
+    });
+  };
+
+  const handleSavePoses = async () => {
+    const randomizedFlowId = await getMostRecentFlow(user.uid);
+    // if (randomFlow.name || categoryFlow.name === 'Core Yoga Poses') {
+    //   savedCorePoses.forEach((savedCorePose) => {
+    //     addPoseToDB({
+    //       ...savedCorePose,
+    //       flowId: randomizedFlowId.flowId,
+    //     }).then(() => {
+    //       history.push(`/account/${user.uid}`);
+    //     });
+    //   });
+    // }
+    if (randomFlow.name || categoryFlow.name === 'Seated Yoga Poses') {
+      savedSeatedPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Strengthening Yoga Poses') {
+      savedStrengthPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Chest Opening Yoga Poses') {
+      savedChestPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Yoga Backbend Poses') {
+      savedBackbendPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Forward Bend Yoga Poses') {
+      savedForwardBendPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Hip Opening Yoga Poses') {
+      savedHipOpeningPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Standing Yoga Poses') {
+      savedStandingPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Restorative Yoga Poses') {
+      savedRestorativePoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Arm Balance Yoga Poses') {
+      savedArmBalancePoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Balancing Yoga Poses') {
+      savedBalancingPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
+    if (randomFlow.name || categoryFlow.name === 'Inversion Yoga Poses') {
+      savedInversionPoses.forEach((pose) => {
+        addPoseToDB({
+          ...pose,
+          flowId: randomizedFlowId.flowId,
+        }).then(() => {
+          history.push(`/account/${user.uid}`);
+        });
+      });
+    }
   };
 
   const resetForm = () => {
@@ -113,6 +310,27 @@ export default function Yoga({ user }) {
     });
     resetForm();
   };
+
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (isMounted) {
+  //     const corePoses = getPosesFromCategory('core_yoga_poses');
+  //     const seatedPoses = getPosesFromCategory('seated_yoga_poses');
+  //     const strengthPoses = getPosesFromCategory('strengthening_yoga_poses');
+  //     const chestPoses = getPosesFromCategory('chest_opening_yoga_poses');
+  //     const backbendPoses = getPosesFromCategory('yoga_backbends');
+  //     const forwardPoses = getPosesFromCategory('forward_bend_yoga_poses');
+  //     const hipOpenPoses = getPosesFromCategory('hip_opening_yoga_poses');
+  //     const standingPoses = getPosesFromCategory('standing_yoga_poses');
+  //     const restorePoses = getPosesFromCategory('restorative_yoga_poses');
+  //     const armBalPoses = getPosesFromCategory('arm_balance_yoga_poses');
+  //     const balPoses = getPosesFromCategory('balancing_yoga_poses');
+  //     const inversionPoses = getPosesFromCategory('inversion_yoga_poses');
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
   return (
     <>
@@ -200,6 +418,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleRandomSelectedCore}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -278,6 +499,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -356,6 +580,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -497,6 +724,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -566,6 +796,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -653,6 +886,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -722,6 +958,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -890,6 +1129,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -968,6 +1210,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -992,6 +1237,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -1034,6 +1282,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -1121,6 +1372,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {randomFlow.name}</h2>
                 <h4>{randomFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{randomFlow.poses[0].sanskrit_name}</div>
                   <div>{randomFlow.poses[0].english_name}</div>
@@ -1163,6 +1417,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleRandomSelectedCore}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1241,6 +1498,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1319,6 +1579,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1460,6 +1723,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1529,6 +1795,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1616,6 +1885,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1694,6 +1966,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1763,6 +2038,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -1931,6 +2209,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -2009,6 +2290,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -2033,6 +2317,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -2075,6 +2362,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>
@@ -2162,6 +2452,9 @@ export default function Yoga({ user }) {
               <>
                 <h2>Flow Name: {categoryFlow.name}</h2>
                 <h4>{categoryFlow.description}</h4>
+                <button type="button" onClick={handleSavePoses}>
+                  Save Flow To Account
+                </button>
                 <div>
                   <div>{categoryFlow.poses[0].sanskrit_name}</div>
                   <div>{categoryFlow.poses[0].english_name}</div>

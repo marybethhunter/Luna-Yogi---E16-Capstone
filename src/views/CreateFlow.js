@@ -57,9 +57,7 @@ export default function CreateFlow({ user }) {
       );
       chosenPoses.push(checkedPose);
       setFlow(chosenPoses);
-      // console.warn(checkedPose);
     }
-    // console.warn(chosenPoses);
   };
 
   const handleClick = () => {

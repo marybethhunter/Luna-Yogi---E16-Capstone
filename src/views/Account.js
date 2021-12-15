@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  getBlogsByUid,
   getFlowByUid,
   getMantraByUid,
   getMeditationByUid,
+  getBlogsByUid,
 } from '../api/data/userData';
 
 export default function Account({ admin }) {
@@ -13,6 +13,7 @@ export default function Account({ admin }) {
   const [userMantras, setUserMantras] = useState([]);
   const [userBlogPosts, setUserBlogPosts] = useState([]);
   const [userFlows, setUserFlows] = useState([]);
+  // const [userSavedPresetFlows, setUserSavedPresetFlows] = ([]);
   const { uid } = useParams();
 
   useEffect(() => {
@@ -29,6 +30,9 @@ export default function Account({ admin }) {
     getBlogsByUid(uid).then((blogArray) => {
       if (isMounted) setUserBlogPosts(blogArray);
     });
+    // getFlowByUid(uid).then((flowArr) => {
+    //   if (isMounted) setUserSavedPresetFlows(flowArr);
+    // });
     return () => {
       isMounted = false;
     };
@@ -38,14 +42,26 @@ export default function Account({ admin }) {
     <>
       <h1>Your Luna Yogi Account</h1>
       <h2>Saved Flows</h2>
-      {userFlows.map((flow) => (
-        <div key={flow.flowId}>
-          <ul>
-            <li>Flow Created On: {flow.dateCreated}</li>
-            <Link to={`/flows/${flow.flowId}`}>Go to Flow</Link>
-          </ul>
-        </div>
-      ))}
+      <>
+        {userFlows.map((flow) => (
+          <div key={flow.flowId}>
+            <ul>
+              <li>Flow Created On: {flow.dateCreated}</li>
+              <Link to={`/flows/${flow.flowId}`}>Go to Flow</Link>
+            </ul>
+          </div>
+        ))}
+      </>
+      <>
+        {/* {userSavedPresetFlows.map((flow) => (
+          <div key={flow.flowId}>
+            <ul>
+              <li>Flow Created On: {flow.dateCreated}</li>
+              <Link to={`/flows/${flow.flowId}`}>Go to Flow</Link>
+            </ul>
+          </div>
+        ))} */}
+      </>
       <h2>Saved Meditations</h2>
       {userMeditations.map((meditation) => (
         <div key={meditation.meditationId}>

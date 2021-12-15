@@ -1,5 +1,6 @@
 import axios from 'axios';
 import firebaseConfig from '../apiKeys';
+import { getSinglePost } from './blogData';
 
 const dbUrl = firebaseConfig.databaseURL;
 
@@ -71,7 +72,7 @@ const getMostRecentFlow = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const addBlogFBKey = (blogId, uid) => new Promise((resolve, reject) => {
+const addBlogFBKey = (blogId) => new Promise((resolve, reject) => {
   axios
     .post(`${dbUrl}/userJoinBlogPosts.json`, blogId)
     .then((response) => {
@@ -80,7 +81,6 @@ const addBlogFBKey = (blogId, uid) => new Promise((resolve, reject) => {
         .patch(
           `${dbUrl}/userJoinBlogPosts/${firebaseKey}.json`,
           { firebaseKey },
-          uid,
           blogId,
         )
         .then(resolve);
@@ -95,6 +95,24 @@ const getBlogsByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getUserJoinBlogs = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/userJoinBlogPosts.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch(reject);
+});
+
+const getUsersBlogs = (uid) => new Promise((resolve, reject) => {
+  getUserJoinBlogs(uid)
+    .then((postArray) => {
+      const keys = postArray.map((post) => post.blogKey);
+      keys.forEach((key) => {
+        getSinglePost(key).then((response) => resolve(Object.values(response.data)));
+      });
+    })
+    .catch(reject);
+});
+
 export {
   createUserObj,
   filterByUid,
@@ -106,4 +124,6 @@ export {
   getUserFlows,
   addBlogFBKey,
   getBlogsByUid,
+  getUserJoinBlogs,
+  getUsersBlogs,
 };
