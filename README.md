@@ -1,4 +1,4 @@
-# Luna Yogi - E16 Capstone Project! 
+# Luna Yogi - E16 Capstone Project! [![Netlify Status](https://api.netlify.com/api/v1/badges/bd6ac731-e8af-494b-86c7-e7043c84034a/deploy-status)](https://app.netlify.com/sites/lunayogi/deploys)
 
 
 ![luna yogi](https://user-images.githubusercontent.com/86667443/146215625-4f07fa01-4218-4426-bab2-f13b208330ca.png)
