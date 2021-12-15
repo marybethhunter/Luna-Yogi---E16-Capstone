@@ -42,35 +42,6 @@ function Initialize() {
   return (
     // have logo/header and button group here and then the footer below
     <>
-      {/* {user === null ? (
-        <h1>Loading...</h1>
-      ) : (
-        <>
-          <NavButtonGroup user={user} admin={admin} />
-          {user ? (
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={() => {
-                signOutUser().then(() => {
-                  history.push('/');
-                });
-              }}
-            >
-              sign out
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={signInUser}
-            >
-              sign in
-            </button>
-          )}
-          <Routes user={user} admin={admin} />
-        </>
-      )} */}
       <NavButtonGroup user={user} admin={admin} />
       {user ? (
         <button

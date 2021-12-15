@@ -24,7 +24,11 @@ export default function Account({ admin }) {
       if (isMounted) setUserMantras(mantraArray);
     });
     getFlowByUid(uid).then((flowArray) => {
-      if (isMounted) setUserFlows(flowArray);
+      if (isMounted) {
+        setUserFlows(
+          flowArray.sort((a, b) => (a.dateCreated > b.dateCreated ? 1 : -1)),
+        );
+      }
     });
     getBlogsByUid(uid).then((blogArray) => {
       if (isMounted) setUserBlogPosts(blogArray);
