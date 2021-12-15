@@ -1,82 +1,70 @@
-# React Template
-[![Netlify Status](https://api.netlify.com/api/v1/badges/339c4ae9-fc7f-41b4-9b49-2dab0a20eaba/deploy-status)](https://app.netlify.com/sites/react-template-21/deploys)
+# Luna Yogi - E16 Capstone Project! 
 
-[See Live Demo of this Template](https://react-template-21.netlify.app/)
 
-This template includes all the dependencies and set up needed for you to work within defined code standards and structure to get you up and running quickly.
+![luna yogi](https://user-images.githubusercontent.com/86667443/146215625-4f07fa01-4218-4426-bab2-f13b208330ca.png)
 
-## Topics
-- [Get Started](#get-started)
-- [Starting the Project](#starting-the-project)
-- [Other important tidbits](#other-important-tidbits)
-    - [React Dev Tools](#react-dev-tools)
-    - [Using axios](#using-axios)
-    - [Deploying on Netlify](#deploying-on-netlify)
-___
+## [View Site]()
+## Get Started:
 
-## Get Started
-### Use Template
-#### 1. To get started, click the GREEN "Use this Template" button at the top of the repo
-![Use this Template](./documentation/usetemplate.png)
 
-#### 2. Make sure YOUR github account is selected in the dropdown and name your project
-![Create Project](./documentation/createproject.png)
-
-3. Clone your new repo to your local machine
-4. Go to the **NEXT** section
-
-## Starting the Project
-1. Open the `package.json` file and change the `name` property to the name of your application, and `author` to  your name
-1. Open the `/public/index.html` file and change the `title` attribute to the name of your application
-1. Rename the `.env.local.sample` file to `.env.local` file. The final file name should be `.env.local`
-1. From your command line, be in the root directory and run `npm install` OR `npm i` for short
-1. From your command line, be in the root directory and run `npx husky install`
-1. To start your application, run `npm start`
-
-### If you see this, you are set to go!
-![LIT](./documentation/lit-screen.png)
-
-**NOTES:** 
-- Changes you make to the project will make the browser reload on save...no more hard refresh unless something goes wrong.
-
-## Other Important Tidbits
-### React Dev Tools
-From this time forward, you will be expected to have a clean console in order for your assignments to be approved. Use [React Developer Tools Chrome Extension](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) to help with debugging.
-### Including Images with React
-If you have a folder of local images that you want to load into your code things get a little strange with webpack.  Remember the only way webpack knows about assets is if they are imported into your javascript files.  Even our CSS is not added until those files are imported into our javascript files.  Below is some sample code for how to load a local image file into your project
-
-```js
-import cat from './assets/cat.jpg';
-
-<>
-  <img src=${cat} alt="picture of a cat"/>
-</>
-
+```javascript
+ $ git clone git@github.com:marybethhunter/LunaYogi-E16Capstone.git
+ $ cd LunaYogi-E16Capstone
 ```
-### Using Axios
-> For every file you will need to make an API request in, you will need to import Axios
-```js
-import axios from 'axios';
 
-const examplePromise = () => {
-  axios.get('http://localhost:3001/example')
-    .then((data) => {
-      console.warn(data);
-    })
-    .catch((error) => {
-      console.error(error);
+## About
+* Luna Yogi is a movement and mindfulness app that allows users to get daily meditations and affirmations, blog posts, and yoga flows. 
+* I created Luna Yogi to have everything movement and mindfulness I need all in one place. Personally, I have two meditation apps, a yoga app, and a few different blog sites I use in conjunction with each other. It can be a lot to keep up with. Luna Yogi is the one-stop-shop for all of these things!
+
+
+## Features: 
+
+#### **Unauthenticated Users**:
+* Unauthenticated users have read-only access to the daily meditation, affirmation, and blog views.
+#### **Authenticated Users**:
+* Authenticated users have access to the above views, as well as the yoga and account views. In the yoga view, they can get a randomized yoga flow, choose a flow from a list, or create their own. Authenticated users also have an account page that shows all of the content they have saved that they can refer back to at any time. Content that can be saved to an authenticated user's account consists of: blog posts, yoga flows, affirmations, and meditations.
+#### **Admin CRUD**: 
+* As the administrator of this site, I have full CRUD capabilities on the blog post section of the site.
+
+## [Loom video walkthrough!]()
+
+## Relevant Links:
+* [Figma Wireframe](https://www.figma.com/file/7uOdLefTT25DgrhhqTfmkS/Luna-Yogi-Capstone?node-id=0%3A1)
+* [Technical Flowchart](https://docs.google.com/presentation/d/1pf3ZF9VGCbTWPnRUrzNJ-a2sat36xseGr8uGBnimu-s/edit?usp=sharing)
+* [ERD](https://dbdiagram.io/d/61a4fdef8c901501c0d7c844)
+* [Project Board](https://github.com/marybethhunter/LunaYogi-E16Capstone/projects/1)
+
+## Code Snippets:
+
+```javascript
+  const saveCustomPoses = async () => {
+    const flowIdToAdd = await getMostRecentFlow(user.uid);
+    chosenPoses.forEach((chosenPose) => {
+      const newId = addOne();
+      addPoseToDB({
+        ...chosenPose,
+        flowId: flowIdToAdd.flowId,
+        orderNumber: newId,
+      }).then(() => {
+        history.push(`/account/${user.uid}`);
+      });
     });
-});
+  };
 ```
 
-### Deploying on Netlify
+## Technology Used:
+* Javascript
+* React
+* Firebase
+* Postman
+* Figma
+* Axios
+* Reactstrap
+* Styled Components
+* Lightning Yogi API
+* Deep Meditate API
+* Affirmations.dev API
 
-- Build Command: `yarn build`
-- Publish directory: `build`
-- **Add Environmental Variables (NOT REQUIRED for Apps that do not use API Keys, etc)**
-    - Any Enviromental variables you are using in your `.env.local` file should be added to Netlify. 
-        - Go to Site settings > Build & deploy > Environment > Environment variables and the keys and values there.
-- **Update Firebase URL Settings**
-    - In Firebase under Authentication select sign in methods, scroll to Authorized domains. Add your Netlify URL.
-# Your own learning
-If you are interested in setting up your own project for things outside of class, you can run the command to start a React project `npx create-react-app {APP_NAME}` and setup all the files and structures from scratch.
+## Screenshots:
+
+## Contributors: Mary Beth Hunter, [Github](https://github.com/marybethhunter), [Portfolio](https://marybeth-hunter.com/)
