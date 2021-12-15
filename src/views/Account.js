@@ -13,7 +13,6 @@ export default function Account({ admin }) {
   const [userMantras, setUserMantras] = useState([]);
   const [userBlogPosts, setUserBlogPosts] = useState([]);
   const [userFlows, setUserFlows] = useState([]);
-  // const [userSavedPresetFlows, setUserSavedPresetFlows] = ([]);
   const { uid } = useParams();
 
   useEffect(() => {
@@ -30,9 +29,6 @@ export default function Account({ admin }) {
     getBlogsByUid(uid).then((blogArray) => {
       if (isMounted) setUserBlogPosts(blogArray);
     });
-    // getFlowByUid(uid).then((flowArr) => {
-    //   if (isMounted) setUserSavedPresetFlows(flowArr);
-    // });
     return () => {
       isMounted = false;
     };
@@ -51,16 +47,6 @@ export default function Account({ admin }) {
             </ul>
           </div>
         ))}
-      </>
-      <>
-        {/* {userSavedPresetFlows.map((flow) => (
-          <div key={flow.flowId}>
-            <ul>
-              <li>Flow Created On: {flow.dateCreated}</li>
-              <Link to={`/flows/${flow.flowId}`}>Go to Flow</Link>
-            </ul>
-          </div>
-        ))} */}
       </>
       <h2>Saved Meditations</h2>
       {userMeditations.map((meditation) => (

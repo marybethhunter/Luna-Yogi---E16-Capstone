@@ -1,6 +1,5 @@
 import axios from 'axios';
 import firebaseConfig from '../apiKeys';
-import { getSinglePost } from './blogData';
 
 const dbUrl = firebaseConfig.databaseURL;
 
@@ -95,20 +94,13 @@ const getBlogsByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getUserJoinBlogs = (uid) => new Promise((resolve, reject) => {
+const getUserJoinBlogKeys = (uid) => new Promise((resolve, reject) => {
   axios
     .get(`${dbUrl}/userJoinBlogPosts.json?orderBy="userId"&equalTo="${uid}"`)
-    .then((response) => resolve(Object.values(response.data)))
-    .catch(reject);
-});
-
-const getUsersBlogs = (uid) => new Promise((resolve, reject) => {
-  getUserJoinBlogs(uid)
-    .then((postArray) => {
-      const keys = postArray.map((post) => post.blogKey);
-      keys.forEach((key) => {
-        getSinglePost(key).then((response) => resolve(Object.values(response.data)));
-      });
+    .then((response) => {
+      const returnedPosts = Object.values(response.data);
+      const findUserPosts = (array) => array.map((post) => post.blogId);
+      resolve(findUserPosts(returnedPosts));
     })
     .catch(reject);
 });
@@ -124,6 +116,5 @@ export {
   getUserFlows,
   addBlogFBKey,
   getBlogsByUid,
-  getUserJoinBlogs,
-  getUsersBlogs,
+  getUserJoinBlogKeys,
 };
