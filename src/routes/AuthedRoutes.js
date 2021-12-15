@@ -4,7 +4,6 @@ import { Route, Switch } from 'react-router-dom';
 import Account from '../views/Account';
 import CreateFlow from '../views/CreateFlow';
 import YogaDetails from '../views/YogaDetails';
-import MeditationDetails from '../views/MeditationDetails';
 import CreateCustom from '../views/CreateCustom';
 
 export default function AuthedRoutes({ user, admin }) {
@@ -37,13 +36,6 @@ export default function AuthedRoutes({ user, admin }) {
         exact
         path="/yogadetails"
         component={() => <CreateCustom user={user} admin={admin} />}
-      />
-      <Route
-        user={user}
-        admin={admin}
-        exact
-        path="/meditation/:meditationKey"
-        component={() => <MeditationDetails user={user} admin={admin} />}
       />
     </Switch>
   );

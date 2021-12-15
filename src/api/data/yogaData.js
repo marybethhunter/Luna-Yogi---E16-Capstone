@@ -12,12 +12,12 @@ const getRandomFlow = (numBt1and12) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getSpecificFlow = (categoryId) => new Promise((resolve, reject) => {
-  axios
-    .get(`${dbUrl}/yoga_categories/${categoryId}`)
-    .then((response) => resolve(response.data))
-    .catch(reject);
-});
+// const getSpecificFlow = (categoryId) => new Promise((resolve, reject) => {
+//   axios
+//     .get(`${dbUrl}/yoga_categories/${categoryId}`)
+//     .then((response) => resolve(response.data))
+//     .catch(reject);
+// });
 
 const getAllPoses = () => new Promise((resolve, reject) => {
   axios
@@ -37,7 +37,33 @@ const getSingleFlow = (flowId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getPosesFromCategory = (catShortName) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/yoga_poses?yoga_category_short_name=${catShortName}`)
+    .then((response) => {
+      let poseObj = Object.values(response.data);
+      poseObj = poseObj.shift();
+      resolve(poseObj);
+    })
+    .catch(reject);
+});
+
 // firebase
+const addPresetFlowPosesToFB = (category, poseObj) => new Promise((resolve, reject) => {
+  getPosesFromCategory(category).then(() => {
+    axios
+      .post(`${fbUrl}/poses.json`, poseObj)
+      .then((response) => {
+        const poseId = response.data.name;
+        axios
+          .patch(`${fbUrl}/poses/${poseId}.json`, {
+            poseId,
+          })
+          .then(resolve);
+      })
+      .catch(reject);
+  });
+});
 const getAllPosesFromFB = () => new Promise((resolve, reject) => {
   axios
     .get(`${fbUrl}/poses.json`)
@@ -62,7 +88,7 @@ const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
     .then((response) => {
       const flowId = response.data.name;
       axios.patch(`${fbUrl}/flows/${flowId}.json`, { flowId }).then(() => {
-        resolve(Object.values(response.data));
+        resolve(flowId);
       });
     })
     .catch(reject);
@@ -102,9 +128,24 @@ const getPosesByFlowId = (flowId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+// const addYogaPosesToFB = (coreFlowObj) => new Promise((resolve, reject) => {
+//   getSpecificFlow(1).then(() => {
+//     axios
+//       .post(`${fbUrl}/poses.json`, coreFlowObj)
+//       .then((response) => {
+//         const flowId = response.data.name;
+//         axios
+//           .patch(`${fbUrl}/poses/${flowId}.json`, {
+//             flowId,
+//           })
+//           .then(resolve);
+//       })
+//       .catch(reject);
+//   });
+// });
+
 export {
   getRandomFlow,
-  getSpecificFlow,
   getAllPoses,
   addPoseToDB,
   addFlowToDB,
@@ -114,4 +155,7 @@ export {
   getSingleFlowfromFB,
   getFlowId,
   getPosesByFlowId,
+  // addYogaPosesToFB,
+  getPosesFromCategory,
+  addPresetFlowPosesToFB,
 };

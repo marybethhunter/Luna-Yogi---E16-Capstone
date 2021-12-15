@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { getSinglePost, updatePostWithUserId } from '../api/data/blogData';
-// import { addBlogFBKey } from '../api/data/userData';
 
 export default function BlogDetails({ user }) {
   const [post, setPost] = useState({});
@@ -26,9 +25,15 @@ export default function BlogDetails({ user }) {
     <div className="card">
       <div className="card-header">
         {post.title}
-        <button type="button" onClick={saveUserIDToPost}>
-          Save Blog Post To Account
-        </button>
+        <>
+          {user ? (
+            <button type="button" onClick={saveUserIDToPost}>
+              Save Blog Post To Account
+            </button>
+          ) : (
+            ''
+          )}
+        </>
       </div>
       <div className="card-body">
         <blockquote className="blockquote mb-0">

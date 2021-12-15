@@ -71,7 +71,7 @@ const getMostRecentFlow = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const addBlogFBKey = (blogId, uid) => new Promise((resolve, reject) => {
+const addBlogFBKey = (blogId) => new Promise((resolve, reject) => {
   axios
     .post(`${dbUrl}/userJoinBlogPosts.json`, blogId)
     .then((response) => {
@@ -80,7 +80,6 @@ const addBlogFBKey = (blogId, uid) => new Promise((resolve, reject) => {
         .patch(
           `${dbUrl}/userJoinBlogPosts/${firebaseKey}.json`,
           { firebaseKey },
-          uid,
           blogId,
         )
         .then(resolve);
@@ -95,6 +94,17 @@ const getBlogsByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getUserJoinBlogKeys = (uid) => new Promise((resolve, reject) => {
+  axios
+    .get(`${dbUrl}/userJoinBlogPosts.json?orderBy="userId"&equalTo="${uid}"`)
+    .then((response) => {
+      const returnedPosts = Object.values(response.data);
+      const findUserPosts = (array) => array.map((post) => post.blogId);
+      resolve(findUserPosts(returnedPosts));
+    })
+    .catch(reject);
+});
+
 export {
   createUserObj,
   filterByUid,
@@ -106,4 +116,5 @@ export {
   getUserFlows,
   addBlogFBKey,
   getBlogsByUid,
+  getUserJoinBlogKeys,
 };
