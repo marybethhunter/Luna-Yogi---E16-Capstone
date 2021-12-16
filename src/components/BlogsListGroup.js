@@ -1,7 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { deletePost } from '../api/data/blogData';
+
+const ButtonStyle = styled.button`
+  background-color: white,
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  border: 0px solid white;
+`;
 
 export default function BlogsListGroup({ post, setPosts, admin }) {
   const handleClick = (method) => {
@@ -11,31 +20,34 @@ export default function BlogsListGroup({ post, setPosts, admin }) {
   };
 
   return (
-    <>
-      <div className="card">
+    <div>
+      <div className="card" style={{ margin: 1 }}>
         <div className="card-body">
-          <img src={post.image} alt="thumbnail" style={{ width: '8em' }} />
-          <h5 className="card-title">{post.title}</h5>
-          <p className="card-text">{post.date}</p>
-          <a href={`/blog/${post.postId}`} className="btn btn-primary">
-            Read Full Post
-          </a>
+          <h3 className="card-title">{post.title}</h3>
+          <ButtonStyle type="button">
+            <a
+              href={`/blog/${post.postId}`}
+              style={{ color: 'black', textDecoration: 'none' }}
+            >
+              Read Full Post
+            </a>
+          </ButtonStyle>
           {admin ? (
-            <button
+            <ButtonStyle
               type="button"
-              className="btn btn danger"
               onClick={() => handleClick('delete')}
+              style={{ margin: 10 }}
             >
               Delete Post
-            </button>
+            </ButtonStyle>
           ) : (
             ''
           )}
           {admin ? (
             <Link
               type="button"
-              className="btn btn info"
               to={`/editblog/${post.postId}`}
+              style={{ color: 'black', textDecoration: 'none', margin: 10 }}
             >
               Edit Post
             </Link>
@@ -44,7 +56,7 @@ export default function BlogsListGroup({ post, setPosts, admin }) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -54,7 +54,7 @@ export default function AdminBlogForm({ obj = {} }) {
   };
 
   return (
-    <div>
+    <div style={{ marginBottom: 75 }}>
       <Form onSubmit={handleClick}>
         <FormGroup>
           <Label for="title">Title:</Label>

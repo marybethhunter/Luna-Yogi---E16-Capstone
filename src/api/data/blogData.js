@@ -43,10 +43,20 @@ const getSinglePost = (postId) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const updatePostWithUserId = (postId, userId) => new Promise((resolve, reject) => {
-  axios
-    .patch(`${dbUrl}/blog/${postId}.json`, userId)
-    .then(() => getAllPosts().then(resolve))
+const copyBlogToUser = (postId, postObj) => new Promise((resolve, reject) => {
+  getSinglePost(postId)
+    .then(() => {
+      axios
+        .post(`${dbUrl}/userJoinBlogPosts.json`, postObj)
+        .then((response) => {
+          const firebaseKey = response.data.name;
+          axios
+            .patch(`${dbUrl}/userJoinBlogPosts/${firebaseKey}.json`, {
+              firebaseKey,
+            })
+            .then(resolve);
+        });
+    })
     .catch(reject);
 });
 
@@ -56,5 +66,5 @@ export {
   addNewPost,
   updatePost,
   getSinglePost,
-  updatePostWithUserId,
+  copyBlogToUser,
 };

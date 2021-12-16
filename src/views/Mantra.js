@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { addMantraToDB, getAffirmation } from '../api/data/affirmationData';
+
+const DivStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonStyle = styled.button`
+  background-color: white,
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  border: 0px solid white;
+`;
 
 export default function Mantra({ user }) {
   const [affirmation, setAffirmation] = useState({});
@@ -18,35 +33,38 @@ export default function Mantra({ user }) {
   };
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <h2 className="card-text">{affirmation.affirmation}</h2>
-        {affirmation.affirmation ? (
-          <>
-            {user ? (
-              <button type="button" onClick={saveMantra}>
-                Save Affirmation To Account
-              </button>
-            ) : (
-              ''
-            )}
-          </>
-        ) : (
-          <>
-            <h5 className="card-title">
-              Click to get your daily affirmation from Luna Yogi!
-            </h5>
-            <button
-              type="button"
-              className="btn btn success"
-              onClick={getDailyAffirmation}
-            >
-              Click Here!
-            </button>
-          </>
-        )}
+    <DivStyle>
+      <div className="card" style={{ border: 'none' }}>
+        <div className="card-body">
+          <h2 className="card-text">{affirmation.affirmation}</h2>
+          {affirmation.affirmation ? (
+            <>
+              {user ? (
+                <ButtonStyle
+                  type="button"
+                  onClick={saveMantra}
+                  style={{ width: 200, height: 50 }}
+                >
+                  Save Affirmation To Account
+                </ButtonStyle>
+              ) : (
+                ''
+              )}
+            </>
+          ) : (
+            <DivStyle>
+              <ButtonStyle
+                type="button"
+                style={{ width: 200, height: 50 }}
+                onClick={getDailyAffirmation}
+              >
+                Get daily affirmation!
+              </ButtonStyle>
+            </DivStyle>
+          )}
+        </div>
       </div>
-    </div>
+    </DivStyle>
   );
 }
 

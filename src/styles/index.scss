@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Belleza:regular,bold,italic&subset=latin,latin-ext');
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import 'globals';
 
 body {
   background-color: $favColor !important;
+  font-family: 'Belleza' !important;
 }

@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { getSinglePost, updatePostWithUserId } from '../api/data/blogData';
+import { copyBlogToUser, getSinglePost } from '../api/data/blogData';
+
+const DivStyle = styled.div`
+  margin-right: 400px;
+  margin-left: 400px;
+  margin-top: 50px;
+`;
+
+const ButtonStyle = styled.button`
+  background-color: white,
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  border: 0px solid white;
+`;
 
 export default function BlogDetails({ user }) {
   const [post, setPost] = useState({});
   const { blogKey } = useParams();
 
   const saveUserIDToPost = () => {
-    updatePostWithUserId(blogKey, { userId: user.uid });
+    copyBlogToUser(blogKey, { ...post, userId: user.uid });
   };
 
   useEffect(() => {
@@ -22,28 +37,34 @@ export default function BlogDetails({ user }) {
   }, []);
 
   return (
-    <div className="card">
-      <div className="card-header">
-        {post.title}
-        <>
+    <DivStyle>
+      <div className="card">
+        <div
+          className="card-header"
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h3>{post.title}</h3>
           {user ? (
-            <button type="button" onClick={saveUserIDToPost}>
+            <ButtonStyle type="button" onClick={saveUserIDToPost}>
               Save Blog Post To Account
-            </button>
+            </ButtonStyle>
           ) : (
             ''
           )}
-        </>
+        </div>
+        <div className="card-body">
+          <blockquote className="blockquote mb-0">
+            {/* <img style={{ width: 'auto' }} src={post.image} alt={post.title} /> */}
+            <p>{post.content}</p>
+          </blockquote>
+        </div>
       </div>
-      <div className="card-body">
-        <blockquote className="blockquote mb-0">
-          <img style={{ width: '30rem' }} src={post.image} alt={post.title} />
-          <p>{post.date}</p>
-          <p>{post.content}</p>
-          <footer className="blockquote-footer">Mary Beth Hunter</footer>
-        </blockquote>
-      </div>
-    </div>
+    </DivStyle>
   );
 }
 

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import { getAllPosts } from '../api/data/blogData';
 import BlogsListGroup from '../components/BlogsListGroup';
+
+const DivStyle = styled.div`
+  margin-right: 400px;
+  margin-left: 400px;
+`;
 
 export default function Blog({ user, admin }) {
   const [posts, setPosts] = useState([]);
@@ -18,8 +24,14 @@ export default function Blog({ user, admin }) {
   }, []);
   return (
     <>
-      {admin ? <Link to="/addblog">Add New Blog Post</Link> : ''}
-      <>
+      <DivStyle>
+        {admin ? (
+          <Link to="/addblog" style={{ color: 'black' }}>
+            Add New Blog Post
+          </Link>
+        ) : (
+          ''
+        )}
         {posts.map((post) => (
           <BlogsListGroup
             key={post.postId}
@@ -29,7 +41,7 @@ export default function Blog({ user, admin }) {
             admin={admin}
           />
         ))}
-      </>
+      </DivStyle>
     </>
   );
 }
