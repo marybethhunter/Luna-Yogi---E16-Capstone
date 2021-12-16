@@ -9,11 +9,25 @@ import { getMostRecentFlow } from '../api/data/userData';
 const DivStyle = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-right: 100px;
+  margin-left: 100px;
 `;
 
 const CardStyle = styled.div`
   margin: 5px;
   border-radius: 5px;
+`;
+
+const ButtonStyle = styled.button`
+  background-color: white,
+  width: 150px;
+  height: 40px;
+  border-radius: 8px;
+  margin: 10px;
+  border: 0px solid white;
 `;
 
 const getSearchItems = (searchValue, poses) => {
@@ -64,7 +78,7 @@ export default function CreateFlow({ user }) {
     addFlowToDB({
       flow,
       userId: user.uid,
-      dateCreated: new Date().toString(),
+      dateCreated: new Date().toDateString(),
     }).then(() => {
       const searchDiv = document.getElementById('search');
       if (searchDiv.style.display === 'none') {
@@ -112,31 +126,36 @@ export default function CreateFlow({ user }) {
   }, []);
 
   return (
-    <div>
+    <DivStyle>
       <div id="heading">
-        <h1>Add Poses to Custom Flow</h1>
-        <h3>
-          Select the poses for your flow and click &apos;CREATE FLOW&apos;!
-        </h3>
+        <h1>Custom Yoga Flow</h1>
+        <h3>Select the poses for your flow in order and click create!</h3>
         <div>
-          <button type="button" onClick={handleClick}>
-            CREATE FLOW
-          </button>
-          <div className="input-group rounded" style={{ width: '20rem' }}>
-            <span className="input-group-text border-0" id="search-addon">
-              <i className="fas fa-search" />
-            </span>
-            <input
-              type="text"
-              className="form-control rounded"
-              placeholder="Search Poses"
-              aria-label="Search Poses"
-              aria-describedby="search-poses"
-              onChange={(e) => {
-                setSearchValue(e.target.value);
-              }}
-            />
-          </div>
+          <ButtonStyle type="button" onClick={handleClick}>
+            Create Flow
+          </ButtonStyle>
+          <DivStyle>
+            <div className="input-group" style={{ width: '20rem' }}>
+              <span
+                className="input-group-text border-0"
+                id="search-addon"
+                style={{ marginBottom: 5, borderRadius: 6, height: 40 }}
+              >
+                <i className="fas fa-search" />
+              </span>
+              <input
+                type="text"
+                style={{ marginBottom: 5, borderRadius: 8 }}
+                className="form-control"
+                placeholder="Search Poses"
+                aria-label="Search Poses"
+                aria-describedby="search-poses"
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+              />
+            </div>
+          </DivStyle>
         </div>
       </div>
       <div id="search">
@@ -180,9 +199,9 @@ export default function CreateFlow({ user }) {
         {chosenPoses ? (
           <>
             <h1>Custom Flow</h1>
-            <button type="button" onClick={saveCustomPoses}>
+            <ButtonStyle type="button" onClick={saveCustomPoses}>
               Save Flow To Account
-            </button>
+            </ButtonStyle>
             <DivStyle>
               {chosenPoses.map((pose) => (
                 <CardStyle
@@ -208,7 +227,7 @@ export default function CreateFlow({ user }) {
           ''
         )}
       </div>
-    </div>
+    </DivStyle>
   );
 }
 

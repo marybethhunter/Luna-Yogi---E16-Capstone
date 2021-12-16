@@ -6,6 +6,11 @@ import { getPosesByFlowId } from '../api/data/yogaData';
 const DivStyle = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-right: 100px;
+  margin-left: 100px;
 `;
 
 const CardStyle = styled.div`

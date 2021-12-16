@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import {
   getFlowByUid,
   getMantraByUid,
@@ -8,7 +8,15 @@ import {
   getBlogsByUid,
 } from '../api/data/userData';
 
-export default function Account({ admin }) {
+const DivStyle = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+export default function Account() {
   const [userMeditations, setUserMeditations] = useState([]);
   const [userMantras, setUserMantras] = useState([]);
   const [userBlogPosts, setUserBlogPosts] = useState([]);
@@ -39,15 +47,21 @@ export default function Account({ admin }) {
   }, []);
 
   return (
-    <>
-      <h1>Your Luna Yogi Account</h1>
+    <DivStyle>
+      <h1 style={{ margin: 20 }}>Your Luna Yogi Account</h1>
       <h2>Saved Flows</h2>
       <>
         {userFlows.map((flow) => (
           <div key={flow.flowId}>
             <ul>
-              <li>Flow Created On: {flow.dateCreated}</li>
-              <Link to={`/flows/${flow.flowId}`}>Go to Flow</Link>
+              <li>
+                <Link
+                  to={`/flows/${flow.flowId}`}
+                  style={{ color: 'black', textDecoration: 'none' }}
+                >
+                  Flow Created On: {flow.dateCreated}
+                </Link>
+              </li>
             </ul>
           </div>
         ))}
@@ -56,14 +70,16 @@ export default function Account({ admin }) {
       {userMeditations.map((meditation) => (
         <div key={meditation.meditationId}>
           <ul>
-            <li>{meditation.meditation_title}</li>
-            <a
-              href={meditation.meditation_url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Link to Meditation
-            </a>
+            <li>
+              <a
+                href={meditation.meditation_url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: 'black', textDecoration: 'none' }}
+              >
+                {meditation.meditation_title}
+              </a>
+            </li>
           </ul>
         </div>
       ))}
@@ -77,29 +93,26 @@ export default function Account({ admin }) {
       ))}
       <h2>Saved Blog Posts</h2>
       {userBlogPosts.map((post) => (
-        <div key={post.postId}>
+        <div key={post.firebaseKey}>
           <ul>
-            <li>{post.title}</li>
-            <Link to={`/blog/${post.postId}`}>Go to Post</Link>
+            <li>
+              <Link
+                to={`/blog/${post.postId}`}
+                style={{ color: 'black', textDecoration: 'none' }}
+              >
+                {post.title}
+              </Link>
+            </li>
           </ul>
         </div>
       ))}
-      {admin ? (
-        <>
-          <h1>admin acc page</h1>
-          <Link to="/addblog">Add New Blog Post</Link>
-        </>
-      ) : (
-        ''
-      )}
-    </>
+      <div>
+        <img
+          src="https://i.ibb.co/8dH7KLN/footer-squiggle-1.png"
+          alt="gold squiggle"
+          style={{ width: '60%', height: 'auto' }}
+        />
+      </div>
+    </DivStyle>
   );
 }
-
-Account.propTypes = {
-  admin: PropTypes.shape(PropTypes.obj),
-};
-
-Account.defaultProps = {
-  admin: null,
-};
