@@ -76,18 +76,14 @@ export default function Account() {
       <h2>Saved Meditations</h2>
       {userMeditations.map((meditation) => (
         <div key={meditation.meditationId}>
-          {/* <ul> */}
-          {/* <li> */}
           <MedStyle>
             <u>{meditation.meditation_title}</u>
-            {/* </li> */}
             <ReactAudioPlayer
               src={meditation.meditation_url}
               controls
               style={{ marginTop: 10, marginBottom: 25 }}
             />
           </MedStyle>
-          {/* </ul> */}
         </div>
       ))}
       <h2>Saved Mantras</h2>
