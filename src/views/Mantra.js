@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { addMantraToDB, getAffirmation } from '../api/data/affirmationData';
 
 const DivStyle = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
@@ -15,30 +17,41 @@ const ButtonStyle = styled.button`
   height: 40px;
   border-radius: 8px;
   border: 0px solid white;
+  margin-top: 15px;
 `;
 
-export default function Mantra({ user }) {
-  const [affirmation, setAffirmation] = useState({});
+export default function Mantra({ user, admin }) {
+  const [mantra, setMantra] = useState({});
+  const history = useHistory();
 
   const getDailyAffirmation = () => {
     getAffirmation().then((obj) => {
-      setAffirmation({
-        affirmation: obj.affirmation,
+      setMantra({
+        affirmation: obj.affirmation.affirmation,
       });
     });
   };
 
   const saveMantra = () => {
-    addMantraToDB({ ...affirmation, userId: user.uid });
+    addMantraToDB({ ...mantra, userId: user.uid }).then(() => {
+      history.push(`/account/${user.uid}`);
+    });
   };
 
   return (
     <DivStyle>
+      {admin ? (
+        <Link to="/addaffirmation" style={{ color: 'black' }}>
+          Add New Affirmation
+        </Link>
+      ) : (
+        ''
+      )}
       <div className="card" style={{ border: 'none' }}>
         <div className="card-body">
-          <h2 className="card-text">{affirmation.affirmation}</h2>
-          {affirmation.affirmation ? (
-            <>
+          <h2 className="card-text">{mantra.affirmation}</h2>
+          {mantra.affirmation ? (
+            <DivStyle>
               {user ? (
                 <ButtonStyle
                   type="button"
@@ -50,7 +63,7 @@ export default function Mantra({ user }) {
               ) : (
                 ''
               )}
-            </>
+            </DivStyle>
           ) : (
             <DivStyle>
               <ButtonStyle
@@ -70,8 +83,10 @@ export default function Mantra({ user }) {
 
 Mantra.propTypes = {
   user: PropTypes.shape(PropTypes.obj),
+  admin: PropTypes.shape(PropTypes.obj),
 };
 
 Mantra.defaultProps = {
   user: null,
+  admin: null,
 };

@@ -62,8 +62,6 @@
 * Reactstrap
 * Styled Components
 * Lightning Yogi API
-* Deep Meditate API
-* Affirmations.dev API
 
 ## Screenshots:
 
