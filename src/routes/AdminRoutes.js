@@ -4,6 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 import AdminEditBlog from '../views/AdminEditBlog';
 import AdminBlogForm from '../components/forms/AdminBlogForm';
 import AdminAddPoseForm from '../components/forms/AdminAddPoseForm';
+import AdminAddAffirmation from '../components/forms/AdminAddAffirmation';
+import AdminAddMeditation from '../components/forms/AdminAddMeditation';
 
 export default function AdminRoutes({ admin }) {
   return (
@@ -23,8 +25,20 @@ export default function AdminRoutes({ admin }) {
       <Route
         admin={admin}
         exact
+        path="/addaffirmation"
+        component={() => <AdminAddAffirmation admin={admin} />}
+      />
+      <Route
+        admin={admin}
+        exact
         path="/addpose"
         component={() => <AdminAddPoseForm admin={admin} />}
+      />
+      <Route
+        admin={admin}
+        exact
+        path="/addmeditation"
+        component={() => <AdminAddMeditation admin={admin} />}
       />
     </Switch>
   );
