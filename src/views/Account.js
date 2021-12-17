@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import ReactAudioPlayer from 'react-audio-player';
 import {
   getFlowByUid,
   getMantraByUid,
@@ -14,6 +15,12 @@ const DivStyle = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
+`;
+
+const MedStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 export default function Account() {
@@ -69,18 +76,14 @@ export default function Account() {
       <h2>Saved Meditations</h2>
       {userMeditations.map((meditation) => (
         <div key={meditation.meditationId}>
-          <ul>
-            <li>
-              <a
-                href={meditation.meditation_url}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: 'black', textDecoration: 'none' }}
-              >
-                {meditation.meditation_title}
-              </a>
-            </li>
-          </ul>
+          <MedStyle>
+            <u>{meditation.meditation_title}</u>
+            <ReactAudioPlayer
+              src={meditation.meditation_url}
+              controls
+              style={{ marginTop: 10, marginBottom: 25 }}
+            />
+          </MedStyle>
         </div>
       ))}
       <h2>Saved Mantras</h2>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { copyBlogToUser, getSinglePost } from '../api/data/blogData';
 
 const DivStyle = styled.div`
@@ -21,9 +21,12 @@ const ButtonStyle = styled.button`
 export default function BlogDetails({ user }) {
   const [post, setPost] = useState({});
   const { blogKey } = useParams();
+  const history = useHistory();
 
   const saveUserIDToPost = () => {
-    copyBlogToUser(blogKey, { ...post, userId: user.uid });
+    copyBlogToUser(blogKey, { ...post, userId: user.uid }).then(() => {
+      history.push(`/account/${user.uid}`);
+    });
   };
 
   useEffect(() => {

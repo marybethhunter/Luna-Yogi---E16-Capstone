@@ -6,8 +6,8 @@ import { getAllPosts } from '../api/data/blogData';
 import BlogsListGroup from '../components/BlogsListGroup';
 
 const DivStyle = styled.div`
-  margin-right: 400px;
-  margin-left: 400px;
+  margin-right: 300px;
+  margin-left: 300px;
 `;
 
 export default function Blog({ user, admin }) {

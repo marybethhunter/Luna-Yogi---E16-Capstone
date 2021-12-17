@@ -60,7 +60,9 @@ export default function AdminAddMeditation({ obj = {} }) {
           />
         </FormGroup>
         <FormGroup>
-          <Label for="meditation_duration">Duration in Minutes:</Label>
+          <Label for="meditation_duration">
+            Duration in Minutes (put hyphen before the time):
+          </Label>
           <Input
             onChange={(e) => handleChange(e)}
             value={formInput.meditation_duration || ''}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import ReactAudioPlayer from 'react-audio-player';
 import styled from 'styled-components';
 import {
   addMeditationToDB,
@@ -27,6 +28,7 @@ const ButtonStyle = styled.button`
 
 export default function Meditation({ user, admin }) {
   const [meditation, setMeditation] = useState({});
+  const history = useHistory();
 
   const getMeditation = () => {
     getDailyMeditation().then((obj) => {
@@ -36,12 +38,15 @@ export default function Meditation({ user, admin }) {
         meditation_subtitle: obj.meditation.meditation_subtitle,
         meditation_image: obj.meditation.meditation_image,
         meditation_url: obj.meditation.meditation_url,
+        meditation_webplayer_url: obj.meditation_webplayer_url,
       });
     });
   };
 
   const saveMeditation = () => {
-    addMeditationToDB({ ...meditation, userId: user.uid });
+    addMeditationToDB({ ...meditation, userId: user.uid }).then(() => {
+      history.push(`/account/${user.uid}`);
+    });
   };
 
   return (
@@ -61,14 +66,11 @@ export default function Meditation({ user, admin }) {
           <h5 className="card-text">{meditation.meditation_subtitle}</h5>
           <div>
             {meditation.meditation_title ? (
-              <a
-                href={meditation.meditation_url}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: 'black', fontSize: 24, marginBottom: 8 }}
-              >
-                Link to Meditation
-              </a>
+              <ReactAudioPlayer
+                src={meditation.meditation_url}
+                controls
+                style={{ marginTop: 10 }}
+              />
             ) : (
               ''
             )}
