@@ -26,7 +26,6 @@
 #### **Admin CRUD**: 
 * As the administrator of this site, I have full CRUD capabilities on the blog post section of the site. I can also add meditations and affirmations to the database to be randomly generated for the user.
 
-## [Loom video walkthrough!](https://www.loom.com/share/0243644210024fccba23f768c8bf5fff)
 <a href="https://www.loom.com/share/0243644210024fccba23f768c8bf5fff">
     <p>Luna Yogi | Movement, Mindfulness, and Mantra - 18 December 2021 - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/0243644210024fccba23f768c8bf5fff-with-play.gif">
