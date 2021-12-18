@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { getAllPoses, addPoseToDB, addFlowToDB } from '../api/data/yogaData';
+import {
+  getAllPoses,
+  addPoseToDB,
+  addCustomFlowToDB,
+} from '../api/data/yogaData';
 import { getMostRecentFlow } from '../api/data/userData';
 
 const DivStyle = styled.div`
@@ -75,7 +79,7 @@ export default function CreateFlow({ user }) {
   };
 
   const handleClick = () => {
-    addFlowToDB({
+    addCustomFlowToDB({
       flow,
       userId: user.uid,
       dateCreated: new Date().toDateString(),
