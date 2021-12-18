@@ -43,7 +43,7 @@ export default function YogaDetails() {
           <CardStyle
             className="card"
             style={{ width: '18rem' }}
-            key={pose.orderNumber}
+            key={pose.poseId}
           >
             <img
               className="card-img-top"
