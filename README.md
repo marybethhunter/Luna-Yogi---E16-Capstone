@@ -24,9 +24,13 @@
 #### **Authenticated Users**:
 * Authenticated users have access to the above views, as well as the yoga and account views. In the yoga view, they can get a randomized yoga flow, choose a flow from a list, or create their own. Authenticated users also have an account page that shows all of the content they have saved that they can refer back to at any time. Content that can be saved to an authenticated user's account consists of: blog posts, yoga flows, affirmations, and meditations.
 #### **Admin CRUD**: 
-* As the administrator of this site, I have full CRUD capabilities on the blog post section of the site.
+* As the administrator of this site, I have full CRUD capabilities on the blog post section of the site. I can also add meditations and affirmations to the database to be randomly generated for the user.
 
-## [Loom video walkthrough!]()
+## [Loom video walkthrough!](https://www.loom.com/share/0243644210024fccba23f768c8bf5fff)
+<a href="https://www.loom.com/share/0243644210024fccba23f768c8bf5fff">
+    <p>Luna Yogi | Movement, Mindfulness, and Mantra - 18 December 2021 - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/0243644210024fccba23f768c8bf5fff-with-play.gif">
+  </a>
 
 ## Relevant Links:
 * [Figma Wireframe](https://www.figma.com/file/7uOdLefTT25DgrhhqTfmkS/Luna-Yogi-Capstone?node-id=0%3A1)
