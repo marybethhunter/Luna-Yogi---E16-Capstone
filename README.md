@@ -37,6 +37,7 @@
 ## Code Snippets:
 
 ```javascript
+  // saving chosen custom poses to database
   const saveCustomPoses = async () => {
     const flowIdToAdd = await getMostRecentFlow(user.uid);
     chosenPoses.forEach((chosenPose) => {
@@ -48,6 +49,18 @@
       }).then(() => {
         history.push(`/account/${user.uid}`);
       });
+    });
+  };
+
+  // deleting a user's flow with all associated poses
+  const deleteSavedFlowsandPoses = async (flowId, uid) => {
+    const flowPoses = await getPosesByFlowId(flowId);
+    const deletePosePromises = [];
+    flowPoses.forEach((pose) => {
+      deletePosePromises.push(deletePose(pose.poseId));
+    });
+    Promise.all(deletePosePromises).then(() => {
+      deleteFlow(flowId, uid);
     });
   };
 ```

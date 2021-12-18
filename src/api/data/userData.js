@@ -1,5 +1,6 @@
 import axios from 'axios';
 import firebaseConfig from '../apiKeys';
+import { getPosesByFlowId } from './yogaData';
 
 const dbUrl = firebaseConfig.databaseURL;
 
@@ -64,6 +65,47 @@ const getBlogsByUid = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const deleteSavedMeditation = (meditationId, uid) => new Promise((resolve, reject) => {
+  axios
+    .delete(`${dbUrl}/meditations/${meditationId}.json`)
+    .then(() => getMeditationByUid(uid).then(resolve))
+    .catch(reject);
+});
+
+const deleteSavedAffirmation = (mantraId, uid) => new Promise((resolve, reject) => {
+  axios
+    .delete(`${dbUrl}/mantras/${mantraId}.json`)
+    .then(() => getMantraByUid(uid).then(resolve))
+    .catch(reject);
+});
+
+const deleteSavedBlogs = (firebaseKey, uid) => new Promise((resolve, reject) => {
+  axios
+    .delete(`${dbUrl}/userJoinBlogPosts/${firebaseKey}.json`)
+    .then(() => getBlogsByUid(uid).then(resolve))
+    .catch(reject);
+});
+
+const deletePose = (poseId) => new Promise((resolve, reject) => {
+  axios.delete(`${dbUrl}/poses/${poseId}.json`).then(resolve).catch(reject);
+});
+
+const deleteFlow = (flowId, uid) => new Promise((resolve, reject) => {
+  axios
+    .delete(`${dbUrl}/flows/${flowId}.json`)
+    .then(() => getBlogsByUid(uid).then(resolve))
+    .catch(reject);
+});
+
+const deleteSavedFlowsandPoses = async (flowId, uid) => {
+  const flowPoses = await getPosesByFlowId(flowId);
+  const deletePosePromises = [];
+  flowPoses.forEach((pose) => {
+    deletePosePromises.push(deletePose(pose.poseId));
+  });
+  Promise.all(deletePosePromises).then(deleteFlow(flowId, uid));
+};
+
 export {
   createUserObj,
   checkUserExists,
@@ -72,4 +114,8 @@ export {
   getFlowByUid,
   getMostRecentFlow,
   getBlogsByUid,
+  deleteSavedMeditation,
+  deleteSavedAffirmation,
+  deleteSavedBlogs,
+  deleteSavedFlowsandPoses,
 };
