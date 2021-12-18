@@ -60,7 +60,7 @@ export default function Account() {
     <>
       <DivStyle>
         <h1 style={{ margin: 20 }}>Your Luna Yogi Account</h1>
-        <h2>Saved Flows</h2>
+        <h1>Saved Flows</h1>
         <>
           {userFlows.map((flow) => (
             <div key={flow.flowId}>
@@ -77,7 +77,7 @@ export default function Account() {
             </div>
           ))}
         </>
-        <h2>Saved Meditations</h2>
+        <h1>Saved Meditations</h1>
         {userMeditations.map((meditation) => (
           <div key={meditation.meditationId}>
             <MedStyle>
@@ -104,7 +104,7 @@ export default function Account() {
             </MedStyle>
           </div>
         ))}
-        <h2 style={{ marginTop: 20 }}>Saved Mantras</h2>
+        <h1 style={{ marginTop: 20 }}>Saved Mantras</h1>
         {userMantras.map((mantra) => (
           <div key={mantra.mantraId}>
             <ul>
@@ -136,7 +136,7 @@ export default function Account() {
             </ul>
           </div>
         ))}
-        <h2>Saved Blog Posts</h2>
+        <h1>Saved Blog Posts</h1>
         {userBlogPosts.map((post) => (
           <div key={post.firebaseKey}>
             <ul>

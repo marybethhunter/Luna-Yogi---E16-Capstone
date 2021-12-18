@@ -54,6 +54,16 @@ const addFlowToDB = (flowObj) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const addCustomFlowToDB = (flowObj) => new Promise((resolve, reject) => {
+  axios
+    .post(`${fbUrl}/flows.json`, flowObj)
+    .then((response) => {
+      const flowId = response.data.name;
+      axios.patch(`${fbUrl}/flows/${flowId}.json`, { flowId }).then(resolve);
+    })
+    .catch(reject);
+});
+
 const addPoseToDB = (poseObj) => new Promise((resolve, reject) => {
   axios
     .post(`${fbUrl}/poses.json`, poseObj)
@@ -83,6 +93,7 @@ export {
   getAllPoses,
   addPoseToDB,
   addFlowToDB,
+  addCustomFlowToDB,
   getAllPosesFromFB,
   getFlowId,
   getPosesByFlowId,

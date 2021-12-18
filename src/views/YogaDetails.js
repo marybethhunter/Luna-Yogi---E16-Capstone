@@ -46,7 +46,7 @@ export default function YogaDetails() {
           marginTop: 20,
         }}
       >
-        <h1>Your Custom Flow</h1>
+        <h1>Your Saved Flow</h1>
       </div>
       <DivStyle>
         {userPoses.map((pose) => (
