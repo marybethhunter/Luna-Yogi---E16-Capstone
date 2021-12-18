@@ -38,6 +38,16 @@ export default function YogaDetails() {
 
   return (
     <>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: 20,
+          marginTop: 20,
+        }}
+      >
+        <h1>Your Custom Flow</h1>
+      </div>
       <DivStyle>
         {userPoses.map((pose) => (
           <CardStyle

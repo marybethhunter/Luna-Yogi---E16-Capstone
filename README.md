@@ -51,18 +51,6 @@
       });
     });
   };
-
-  // deleting a user's flow with all associated poses
-  const deleteSavedFlowsandPoses = async (flowId, uid) => {
-    const flowPoses = await getPosesByFlowId(flowId);
-    const deletePosePromises = [];
-    flowPoses.forEach((pose) => {
-      deletePosePromises.push(deletePose(pose.poseId));
-    });
-    Promise.all(deletePosePromises).then(() => {
-      deleteFlow(flowId, uid);
-    });
-  };
 ```
 
 ## Technology Used:
