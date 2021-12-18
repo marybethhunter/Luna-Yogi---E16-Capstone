@@ -13,18 +13,25 @@ const CardDivStyle = styled.div`
   text-align: center;
 `;
 
+const TitleDivStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+`;
+
 const DivStyle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: baseline;
-  margin-right: 400px;
-  margin-left: 400px;
+  margin-right: 300px;
+  margin-left: 300px;
 `;
 
 const ButtonStyle = styled.button`
   background-color: white,
-  width: 100px;
+  width: 80px;
   height: 40px;
   border-radius: 8px;
   margin: 10px;
@@ -164,10 +171,10 @@ export default function Yoga({ user }) {
           <div>
             {randomFlow.poses ? (
               <>
-                <CardDivStyle>
+                <TitleDivStyle>
                   <h2>{randomFlow.name}</h2>
                   <h5>{randomFlow.description}</h5>
-                </CardDivStyle>
+                </TitleDivStyle>
                 <CardDivStyle>
                   <ButtonStyle type="button" onClick={handleSave}>
                     Save Flow To Account
