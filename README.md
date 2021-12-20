@@ -32,6 +32,10 @@
     <p>Luna Yogi | Movement, Mindfulness, and Mantra - 18 December 2021 - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/0243644210024fccba23f768c8bf5fff-with-play.gif">
   </a>
+  
+ ## ERD: 
+ 
+ <img width="699" alt="2021-12-20" src="https://user-images.githubusercontent.com/86667443/146835633-1e36c5b2-feb8-41ec-af13-c5f93483e4b6.png">
 
 ## Relevant Links:
 * [Figma Wireframe](https://www.figma.com/file/7uOdLefTT25DgrhhqTfmkS/Luna-Yogi-Capstone?node-id=0%3A1)
