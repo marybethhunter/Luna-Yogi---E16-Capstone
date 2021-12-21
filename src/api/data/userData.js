@@ -52,7 +52,7 @@ const getFlowByUid = (uid) => new Promise((resolve, reject) => {
 const getMostRecentFlow = (uid) => new Promise((resolve, reject) => {
   getFlowByUid(uid)
     .then((allFlows) => {
-      const newestFlow = allFlows.reduce((a, b) => (a.dateCreated > b.dateCreated ? a : b));
+      const newestFlow = allFlows.reduce((a, b) => (a.dateCreated < b.dateCreated ? a : b));
       resolve(newestFlow);
     })
     .catch(reject);

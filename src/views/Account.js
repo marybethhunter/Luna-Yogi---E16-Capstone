@@ -43,9 +43,7 @@ export default function Account() {
     });
     getFlowByUid(uid).then((flowArray) => {
       if (isMounted) {
-        setUserFlows(
-          flowArray.sort((a, b) => (a.dateCreated > b.dateCreated ? 1 : -1)),
-        );
+        setUserFlows(flowArray);
       }
     });
     getBlogsByUid(uid).then((blogArray) => {
