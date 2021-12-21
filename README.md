@@ -76,7 +76,6 @@
 <img width="957" alt="2021-12-18 (1)" src="https://user-images.githubusercontent.com/86667443/146653192-a23b11ec-e2ee-4097-b8b7-a4d231866219.png">
 <img width="960" alt="2021-12-18 (2)" src="https://user-images.githubusercontent.com/86667443/146653194-825db12d-903d-4938-9943-3c8f372c1a3c.png">
 <img width="953" alt="2021-12-18 (3)" src="https://user-images.githubusercontent.com/86667443/146653197-30295982-9455-4e43-99b3-1e9c07d26c35.png">
-<img width="699" alt="2021-12-20" src="https://user-images.githubusercontent.com/86667443/146835633-1e36c5b2-feb8-41ec-af13-c5f93483e4b6.png">
 
 
 ## Contributors: Mary Beth Hunter, [Github](https://github.com/marybethhunter), [Portfolio](https://marybeth-hunter.com/)
