@@ -26,6 +26,11 @@ const MedStyle = styled.div`
   justify-content: center;
 `;
 
+const ContentStyle = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
 export default function Account() {
   const [userMeditations, setUserMeditations] = useState([]);
   const [userMantras, setUserMantras] = useState([]);
@@ -57,114 +62,122 @@ export default function Account() {
   return (
     <>
       <DivStyle>
-        <h1 style={{ margin: 20 }}>Your Luna Yogi Account</h1>
-        <h1>Saved Flows</h1>
-        <>
-          {userFlows.map((flow) => (
-            <div key={flow.flowId}>
+        <h1 style={{ margin: 15 }}>Your Luna Yogi Account</h1>
+        <ContentStyle>
+          <h1>Saved Flows</h1>
+          <>
+            {userFlows.map((flow) => (
+              <div key={flow.flowId}>
+                <ul>
+                  <li>
+                    <Link
+                      to={`/flows/${flow.flowId}`}
+                      style={{ color: 'black', textDecoration: 'none' }}
+                    >
+                      Flow Created On: {flow.dateCreated}
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            ))}
+          </>
+        </ContentStyle>
+        <ContentStyle>
+          <h1>Saved Meditations</h1>
+          {userMeditations.map((meditation) => (
+            <div key={meditation.meditationId}>
+              <MedStyle>
+                <div style={{ marginBottom: 10 }}>
+                  <u>{meditation.meditation_title}</u>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-trash-fill"
+                    viewBox="0 0 16 16"
+                    style={{ marginLeft: 15 }}
+                    onClick={() => {
+                      deleteSavedMeditation(meditation.meditationId, uid).then(
+                        setUserMeditations,
+                      );
+                    }}
+                  >
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                  </svg>
+                </div>
+                <ReactAudioPlayer src={meditation.meditation_url} controls />
+              </MedStyle>
+            </div>
+          ))}
+        </ContentStyle>
+        <ContentStyle>
+          <h1 style={{ marginTop: 20 }}>Saved Mantras</h1>
+          {userMantras.map((mantra) => (
+            <div key={mantra.mantraId}>
+              <ul>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <li>{mantra.affirmation}</li>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-trash-fill"
+                    viewBox="0 0 16 16"
+                    style={{ marginLeft: 15 }}
+                    onClick={() => {
+                      deleteSavedAffirmation(mantra.mantraId, uid).then(
+                        setUserMantras,
+                      );
+                    }}
+                  >
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                  </svg>
+                </div>
+              </ul>
+            </div>
+          ))}
+        </ContentStyle>
+        <ContentStyle>
+          <h1>Saved Blog Posts</h1>
+          {userBlogPosts.map((post) => (
+            <div key={post.firebaseKey}>
               <ul>
                 <li>
                   <Link
-                    to={`/flows/${flow.flowId}`}
+                    to={`/blog/${post.postId}`}
                     style={{ color: 'black', textDecoration: 'none' }}
                   >
-                    Flow Created On: {flow.dateCreated}
+                    {post.title}
                   </Link>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-trash-fill"
+                    viewBox="0 0 16 16"
+                    style={{ marginLeft: 15 }}
+                    onClick={() => {
+                      deleteSavedBlogs(post.firebaseKey, uid).then(
+                        setUserBlogPosts,
+                      );
+                    }}
+                  >
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                  </svg>
                 </li>
               </ul>
             </div>
           ))}
-        </>
-        <h1>Saved Meditations</h1>
-        {userMeditations.map((meditation) => (
-          <div key={meditation.meditationId}>
-            <MedStyle>
-              <div style={{ marginBottom: 10 }}>
-                <u>{meditation.meditation_title}</u>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-trash-fill"
-                  viewBox="0 0 16 16"
-                  style={{ marginLeft: 15 }}
-                  onClick={() => {
-                    deleteSavedMeditation(meditation.meditationId, uid).then(
-                      setUserMeditations,
-                    );
-                  }}
-                >
-                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                </svg>
-              </div>
-              <ReactAudioPlayer src={meditation.meditation_url} controls />
-            </MedStyle>
-          </div>
-        ))}
-        <h1 style={{ marginTop: 20 }}>Saved Mantras</h1>
-        {userMantras.map((mantra) => (
-          <div key={mantra.mantraId}>
-            <ul>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <li>{mantra.affirmation}</li>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-trash-fill"
-                  viewBox="0 0 16 16"
-                  style={{ marginLeft: 15 }}
-                  onClick={() => {
-                    deleteSavedAffirmation(mantra.mantraId, uid).then(
-                      setUserMantras,
-                    );
-                  }}
-                >
-                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                </svg>
-              </div>
-            </ul>
-          </div>
-        ))}
-        <h1>Saved Blog Posts</h1>
-        {userBlogPosts.map((post) => (
-          <div key={post.firebaseKey}>
-            <ul>
-              <li>
-                <Link
-                  to={`/blog/${post.postId}`}
-                  style={{ color: 'black', textDecoration: 'none' }}
-                >
-                  {post.title}
-                </Link>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-trash-fill"
-                  viewBox="0 0 16 16"
-                  style={{ marginLeft: 15 }}
-                  onClick={() => {
-                    deleteSavedBlogs(post.firebaseKey, uid).then(
-                      setUserBlogPosts,
-                    );
-                  }}
-                >
-                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                </svg>
-              </li>
-            </ul>
-          </div>
-        ))}
+        </ContentStyle>
         <div>
           <img
             src="https://i.ibb.co/8dH7KLN/footer-squiggle-1.png"
